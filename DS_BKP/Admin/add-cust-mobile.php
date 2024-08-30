@@ -1,0 +1,833 @@
+<?php 
+date_default_timezone_set("Asia/Kolkata");
+
+session_start();
+//print_r($_SESSION);
+if(isset($_SESSION['session_username']) && isset($_SESSION['session_password'])){
+$session_store_name=$_SESSION['session_store_name'];
+$session_store_id=$_SESSION['session_store_id'];
+$transaction='legal';
+include("./dbconnect.php");
+$mess='';
+$active="active";
+$customer_name=''; $mobile_defect='';$mobile_defect2=''; $mobile_defect3='';$mobile_defect4=''; $mobile_name=''; $cust_contact=''; $mobile_defect=''; $exp_delivery=date("Y-m-d", strtotime("tomorrow"));
+$est_amount=''; $adv_amount=''; $remarks=''; 
+
+if(isset($_REQUEST['entry_id'])){
+	$btn_value=" Update Entry ";
+	$btn_name="update";
+	
+}else{
+	$btn_value=" Add Entry ";
+	$btn_name="submit";
+	$status_radio="";
+}
+
+if(isset($_REQUEST['rslt'])){
+	if($_REQUEST['rslt']=="success")
+		$mess="<font color='#FFF'>Query Added/Updated Succesfully..</font>";
+	elseif($_REQUEST['rslt']=="failed")
+		$mess="Failed to Add/Update..";
+}
+
+
+if(isset($_REQUEST['submit'])){ //When form Submits
+
+
+		$cust_name_temp=$_REQUEST['customer_name'];
+		if($cust_name_temp==''){
+			$cust_name='Customer';
+		}else{
+			$cust_name=$cust_name_temp;
+		}
+		$adv_amount_temp=$_REQUEST['adv_amount'];
+		$adv_payment_mode=$_REQUEST['adv_payment_mode'];
+		if($adv_amount_temp==''){
+			$adv_amount='';
+		}else{
+			$adv_amount=$adv_amount_temp;
+		}
+		$mobile_name=$_REQUEST['mobile_name'];
+		
+		$mobile_defect=$_REQUEST['mobile_defect'];
+		$mobile_defect2=$_REQUEST['mobile_defect_2'];
+		$mobile_defect3=$_REQUEST['mobile_defect_3'];
+		$mobile_defect4=$_REQUEST['mobile_defect_4'];
+
+		//echo $mobile_defect;exit;
+		$contact_no=$_REQUEST['contact_no'];
+		$alt_contact_no=$_REQUEST['alt_contact_no'];
+		$send_sms_alt_cont=$_REQUEST['send_sms_alt_cont'];
+		if($send_sms_alt_cont=="sendalt"){
+		    $sms_send_cont=$alt_contact_no;
+		}else{
+		    $sms_send_cont=$contact_no;
+		}
+
+		$imei_sn=$_REQUEST['imei_sn'];
+		$exp_delivery=$_REQUEST['exp_delivery'];
+		$est_amount=$_REQUEST['est_amount'];
+		//$adv_amount=$_REQUEST['adv_amount'];
+		$remarks=$_REQUEST['remarks'];
+		$added_by=$_SESSION['session_username'];
+		$store_id=$_SESSION['session_store_id'];
+		//$cur_time=date();
+		$cur_time = date('Y-m-d H:i:s');
+
+		//Inserting Data
+		$sql_ins="INSERT INTO `adm_cust_mob_add`(`customer_name`, `mobile_name`,`cust_contact`,`cust_alt_contact`,`send_sms_to_alt`,`imei_serial_num`,`mobile_defect`,`mobile_defect_2`,`mobile_defect_3`,`mobile_defect_4`,`exp_delivery`,`est_amount`,`adv_amount`,`remarks`,`added_date`,`status`,`rejected`,`delete_status`,`added_by`,`store_id`,`adv_payment_mode`) VALUES 
+		('".$cust_name."','".$mobile_name."','".$contact_no."','".$alt_contact_no."','".$send_sms_alt_cont."','".$imei_sn."','".$mobile_defect."','".$mobile_defect2."','".$mobile_defect3."','".$mobile_defect4."','".$exp_delivery."','".$est_amount."','".$adv_amount."','".$remarks."','".$cur_time ."','Pending', '0','0','".$added_by."','".$store_id."','".$adv_payment_mode."')";
+		//echo $sql_ins; exit;
+		
+		$mob_def_sql1="SELECT `defect_name` FROM `adm_mobile_defects` WHERE `defect_id`=".$mobile_defect;
+		$mob_def_query1=mysql_query($mob_def_sql1);
+		$result_def_query1=mysql_fetch_array($mob_def_query1);
+		$mobile_defect_name1=$result_def_query1['defect_name'];
+		
+		if($mobile_defect2!=''){
+		$mob_def_sql2="SELECT `defect_name` FROM `adm_mobile_defects` WHERE `defect_id`=".$mobile_defect2;
+		$mob_def_query2=mysql_query($mob_def_sql2);
+		$result_def_query2=mysql_fetch_array($mob_def_query2);
+		$mobile_defect_name2=$result_def_query2['defect_name'];
+		
+		}else{
+		$mobile_defect_name2='';
+		}
+		
+		if($mobile_defect3!=''){
+		$mob_def_sql3="SELECT `defect_name` FROM `adm_mobile_defects` WHERE `defect_id`=".$mobile_defect3;
+		$mob_def_query3=mysql_query($mob_def_sql3);
+		$result_def_query3=mysql_fetch_array($mob_def_query3);
+		$mobile_defect_name3=', '.$result_def_query3['defect_name'];
+		}else{
+		$mobile_defect_name3='';
+		}
+		
+		$mobile_defect_name=$mobile_defect_name1.$mobile_defect_name2.$mobile_defect_name3;
+		//echo $mobile_defect_name;exit;
+		$query_ins=mysql_query($sql_ins);
+		if($query_ins){ 
+		    if($mobile_defect_name1 !='' && $mobile_defect_name2 !=''){
+		        $message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name1.', '.$mobile_defect_name2.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you for Visiting Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
+		    }else{
+		        $message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name1.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you. - Digital Storz.';
+		        //$message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name1.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you for Visiting Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
+		    }
+		 //$message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you for Visiting Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
+		//echo $message; exit;
+		
+        
+        $sql_store_id="SELECT `store_id` FROM `adm_mobile_defects` WHERE `defect_id`=".$mobile_defect;
+		$mob_def_query1=mysql_query($mob_def_sql1);
+		$result_def_query1=mysql_fetch_array($mob_def_query1);
+		$mobile_defect_name1=$result_def_query1['defect_name'];
+
+		
+		/*
+		//updating message count in stores.
+		$message_length=strlen($message);
+        $no_of_messages=ceil($message_length/160);
+        //echo $no_of_messages;
+        $sql_msg_cnt_upd="UPDATE `stores` SET message_sent_count = message_sent_count + ".$no_of_messages." WHERE `store_id`=".$_SESSION['session_store_id'];
+        $query_msg_cnt_upd=mysql_query($sql_msg_cnt_upd);
+
+		
+		//SMS SENDING CODE for Adding Mobile
+		
+		$curl = curl_init();
+        $data = array(
+        "SenderId" => "KOLMOB",
+        "Is_Unicode" => false,
+        "Is_Flash" => false,
+        "Message" => $message,
+        "MobileNumbers" => "91".$sms_send_cont,
+        "ApiKey" => "Vinay@9246",
+        "ClientId" => "kolorsmobileservices@gmail.com"
+        );
+        $payload = json_encode($data);
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.smslane.com/api/v2/SendSMS",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS =>$payload,
+        CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json"
+        ),
+        ));
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        //echo $response;
+        //sleep (1);
+        */
+			header('Location: ./view-cust-mobile-entry.php?result_key=pend&dmsg=jas');
+
+		}else{
+			header('Location: ./add-cust-mobile.php?rslt=failed');
+			//$mess="Failed to Add..";
+		}
+}
+
+if(isset($_REQUEST['entry_id'])){ 
+	$sql_disp="SELECT * FROM adm_cust_mob_add WHERE entry_id=".$_REQUEST['entry_id']." AND store_id=".$session_store_id;
+	$query_disp=mysql_query($sql_disp);
+	$rowcount = mysql_num_rows( $query_disp );
+	if($rowcount==0){
+        $transaction='illegal';
+    }
+	$result_disp=mysql_fetch_array($query_disp);
+	
+	$action=$_REQUEST['action'];
+	$entry_id=$result_disp['entry_id'];
+	$customer_name=$result_disp['customer_name'];
+	$mobile_name=$result_disp['mobile_name'];
+	$cust_contact=$result_disp['cust_contact'];
+	$cust_alt_contact=$result_disp['cust_alt_contact'];
+	$send_sms_to_alt=$result_disp['send_sms_to_alt'];
+	$mobile_defect=$result_disp['mobile_defect'];
+	$mobile_defect2=$result_disp['mobile_defect_2'];
+	$mobile_defect3=$result_disp['mobile_defect_3'];
+	$mobile_defect4=$result_disp['mobile_defect_4'];
+	$imei_serial_num=$result_disp['imei_serial_num'];
+	$exp_delivery=$result_disp['exp_delivery'];
+	$est_amount=$result_disp['est_amount'];
+	$adv_amount=$result_disp['adv_amount'];
+	$remarks=$result_disp['remarks'];
+	$spare_cost_1=$result_disp['spare_cost'];
+	$status=$result_disp['status'];
+	$advpay_mode=$result_disp['adv_payment_mode'];
+	
+	//echo $advpay_mode;
+	//exit;
+	if($status=='Pending')	
+	$status_radio="	<input type='radio' name='entry_status_upd' value='Pending' checked > <font style='font-size:14px'>Pending</font>
+	                
+			        <input type='radio' name='entry_status_upd' value='Completed'> <font style='font-size:14px'>Completed</font>
+			        <input type='radio' name='entry_status_upd' value='Rejected' onclick=generateRow() > <font style='font-size:14px'>Rejected</font> <br>
+			        <input type='checkbox' id='notify_user' name='notify_user' value='notify_user_yes'>
+                    <label for='notify_user' style='font-size:12px'> Notify Changes to customer</label>";
+
+	elseif($status=='Completed')
+	$status_radio="	<input type='radio' name='entry_status_upd' value='Pending'> Pending
+			        <input type='radio' name='entry_status_upd' value='Completed' checked> Completed 
+			        <input type='radio' name='entry_status_upd' value='Rejected'> Rejected ";
+	elseif($status=='Rejected')
+	$status_radio="	<input type='radio' name='entry_status_upd' value='Pending'> Pending
+			        <input type='radio' name='entry_status_upd' value='Completed'> Completed 
+			        <input type='radio' name='entry_status_upd' value='Rejected' checked> Rejected ";
+			
+	
+					
+} 
+if(isset($_REQUEST['update'])){ //When form Submits for Update
+
+//print_r($_REQUEST);exit;
+		$entry_id=$_REQUEST['hidden_entry_id'];
+		$cust_name=$_REQUEST['customer_name'];
+		$mobile_name=$_REQUEST['mobile_name'];
+		$contact_no=$_REQUEST['contact_no'];
+		$cust_alt_contact=$_REQUEST['alt_contact_no'];
+		$send_sms_to_alt=$_REQUEST['send_sms_alt_cont'];
+		if($send_sms_to_alt=="sendalt"){
+		    $sms_send_cont=$cust_alt_contact;
+		}else{
+		    $sms_send_cont=$contact_no;
+		}
+		$imei_serial_num=$_REQUEST['imei_sn'];
+		$mobile_defect=$_REQUEST['mobile_defect'];
+		$mobile_defect2=$_REQUEST['mobile_defect_2'];
+		$mobile_defect3=$_REQUEST['mobile_defect_3'];
+		$mobile_defect4=$_REQUEST['mobile_defect_4'];
+		$exp_delivery=$_REQUEST['exp_delivery'];
+		$est_amount=$_REQUEST['est_amount'];
+		$adv_amount=$_REQUEST['adv_amount']; 
+		$spare_cost=$_REQUEST['spare_cost'];
+		$remarks=$_REQUEST['remarks'];
+		$entry_status_upd=$_REQUEST['entry_status_upd'];
+		$adv_payment_mode =$_REQUEST['adv_payment_mode'];
+		
+		
+		if(isset($_REQUEST['rejected_reason'])){
+		  $rejected_reason=$_REQUEST['rejected_reason'];
+		}else{
+		  $rejected_reason='';
+		}
+		
+		if($entry_status_upd=='Rejected'){
+			$reject_status='1';
+		}else{
+			$reject_status='0';
+		}
+		$repair_by=$_SESSION['session_username'];
+		//echo $repair_by;
+		//exit;
+		$cur_time = date('Y-m-d H:i:s');
+		//Inserting Data
+		$sql_upd="UPDATE `adm_cust_mob_add` SET
+									`customer_name`='".$cust_name."', 
+									`mobile_name`='".$mobile_name."',
+									`cust_contact`='".$contact_no."',
+									`cust_alt_contact`='".$cust_alt_contact."',
+									`send_sms_to_alt`='".$send_sms_to_alt."',
+									`imei_serial_num`='".$imei_serial_num."',
+									`mobile_defect`='".$mobile_defect."',
+									`mobile_defect_2`='".$mobile_defect2."',
+									`mobile_defect_3`='".$mobile_defect3."',
+									`mobile_defect_4`='".$mobile_defect4."',
+									`exp_delivery`='".$exp_delivery."',
+									`est_amount`='".$est_amount."',
+									`adv_amount`='".$adv_amount."',
+									`spare_cost`='".$spare_cost."',
+									`status`='".$entry_status_upd."',
+									`rejected`='".$reject_status."',
+									`rejected_reason`='".$rejected_reason."',
+									`remarks`='".$remarks."',
+									`repair_by`='".$repair_by."',
+									`repair_date`='".$cur_time ."',
+									`adv_payment_mode`='".$adv_payment_mode."'
+									WHERE entry_id=".$entry_id;
+
+		//echo $sql_upd; exit;
+		$query_upd=mysql_query($sql_upd);
+		if($query_upd){ 
+		
+		
+		$rem_amt=$est_amount-$adv_amount;
+		
+		$mob_def_sql="SELECT `defect_name` FROM `adm_mobile_defects` WHERE `defect_id`=".$mobile_defect;
+		$mob_def_query=mysql_query($mob_def_sql);
+		$result_def_query=mysql_fetch_array($mob_def_query);
+		$mobile_defect_name=$result_def_query['defect_name'];
+		
+		if($entry_status_upd=="Completed"){
+		    $message='Hello '.$cust_name.', Your mobile '.$mobile_name.', is ready for delivery. Please visit our store and collect your mobile. Remaining amount to pay is '.$rem_amt.'. Thank you, Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES';
+		}elseif($entry_status_upd=="Rejected"){
+		    //$message='Hello '.$cust_name.', Your mobile '.$mobile_name.', with defect: '.$mobile_defect_name.' is not resolvable, Please Visit out store and collect your mobile. Thank you, Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 040-65149944.';
+		    $message='Dear '.$cust_name.', Your mobile '.$mobile_name.', with defect: '.$mobile_defect_name.' is not resolvable, Please Visit out store and collect your mobile. Thank you, Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
+		}elseif($entry_status_upd=="Pending" && $_REQUEST['notify_user']=='notify_user_yes'){
+		    $message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name1.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you for Visiting Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
+		}
+		
+		/*
+		//echo $message;exit;
+		//updating message count in stores.
+		$message_length=strlen($message);
+        $no_of_messages=ceil($message_length/160);
+        //echo $no_of_messages;
+        $sql_msg_cnt_upd="UPDATE `stores` SET message_sent_count = message_sent_count + ".$no_of_messages." WHERE `store_id`=".$_SESSION['session_store_id'];
+        $query_msg_cnt_upd=mysql_query($sql_msg_cnt_upd);
+		//SMS SENDING CODE for Completed and Rejected
+		
+		$curl = curl_init();
+        $data = array(
+        "SenderId" => "KOLMOB",
+        "Is_Unicode" => false,
+        "Is_Flash" => false,
+        "Message" => $message,
+        "MobileNumbers" => "91".$sms_send_cont,
+        "ApiKey" => "Vinay@9246",
+        "ClientId" => "kolorsmobileservices@gmail.com"
+        );
+        $payload = json_encode($data);
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.smslane.com/api/v2/SendSMS",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS =>$payload,
+        CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json"
+        ),
+        ));
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        //echo $response;
+        */
+		
+			header('Location: ./view-cust-mobile-entry.php?result_key=pend');
+			//$mess="<font color='#fff'>Category Added Succesfully..</font>";
+		}else{
+			header('Location: ./add-cust-mobile.php?rslt=failed');
+			//$mess="Failed to Add..";
+		}
+}
+?>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+	<!-- For Menu-->
+	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+	<!-- For Menu-->
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet" type="text/css"/>
+	
+	<script type="text/javascript">
+            // Form validation code for SIGN UP
+        function validate()
+            {
+		
+		if (document.category_add.contact_no.value == "")
+                {
+                    document.category_add.contact_no.focus();
+                    alert("Enter Customer Mobile Number");
+		    return false;
+                }
+                
+        if (document.category_add.contact_no.value != "")
+                {
+					var y = document.category_add.contact_no.value;
+                    if(!y.match(/^\d+/))
+                    {
+                        alert("This Field allows only Numbers.");
+                        document.category_add.contact_no.focus();
+                        return false;
+                    }
+                    
+                    if ( ! (/^\d{10}$/.test(y)) ) {
+    		            alert("Invalid Mobile Number.. Must be 10 digits");
+    		            document.category_add.contact_no.focus();
+    		            return false;
+		            }
+                }
+        if (document.category_add.alt_contact_no.value != "")
+                {
+					var y = document.category_add.alt_contact_no.value;
+                    if(!y.match(/^\d+/))
+                    {
+                        alert("This Field allows only Numbers.");
+                        document.category_add.alt_contact_no.focus();
+                        return false;
+                    }
+                    
+                    if ( ! (/^\d{10}$/.test(y)) ) {
+    		            alert("Invalid Mobile Number.. Must be 10 digits");
+    		            document.category_add.alt_contact_no.focus();
+    		            return false;
+		            }
+                }
+                
+        /*var val = document.category_add.contact_no.value;
+		if (/^\d{10}$/.test(val)) {
+    		return true
+		} else {
+    		alert("Invalid Mobile Number.. Must be 10 digits")
+    		document.category_add.contact_no.focus()
+    		return false
+		}*/
+		
+  	
+		if (document.category_add.mobile_name.value == "")
+                {
+                    document.category_add.mobile_name.focus();
+                    alert("Enter Mobile Name");
+		    return false;
+                }
+ 
+        if (document.category_add.est_amount.value != "")
+                {
+					var y = document.category_add.est_amount.value;
+                    if(!y.match(/^\d+/))
+                    {
+                        alert("This Field allows only Numbers.");
+                        document.category_add.est_amount.focus();
+                        return false;
+                    }
+                }        
+		if (document.category_add.mobile_defect.value == "")
+                {
+                    document.category_add.mobile_defect.focus();
+                    alert("Enter Mobile Defect");
+		    return false;
+                }
+        if (document.category_add.adv_amount.value != "" && document.category_add.adv_payment_mode.value == "")
+                {
+                    alert("Please Select Advance Payment Mode when Advance is entered.");
+                    document.category_add.adv_payment_mode.focus();
+                     return false;
+                }
+                
+
+            }
+
+			function numbersonly(e){
+			    //alert("hi");
+				var unicode=e.charCode? e.charCode : e.keyCode
+				if (unicode!=8){ //if the key isn't the backspace key (which we should allow)
+				if (unicode<48||unicode>57) //if not a number
+				if (document.category_add.contact_no.value < 10)
+				return false //disable key press
+				}
+			}
+			function numbersonly2(e){
+			    //alert("hi");
+				var unicode=e.charCode? e.charCode : e.keyCode
+				if (unicode!=8){ //if the key isn't the backspace key (which we should allow)
+				if (unicode<48||unicode>57) //if not a number
+				if (document.category_add.alt_contact_no.value < 10)
+				return false //disable key press
+				}
+			}
+			function numbersonly3(e){
+			    //alert("hi");
+				var unicode=e.charCode? e.charCode : e.keyCode
+				if (unicode!=8){ //if the key isn't the backspace key (which we should allow)
+				if (unicode<48||unicode>57) //if not a number
+				if (document.category_add.est_amount.value < 10)
+				return false //disable key press
+				}
+			}
+			function numbersonly4(e){
+			    //alert("hi");
+				var unicode=e.charCode? e.charCode : e.keyCode
+				if (unicode!=8){ //if the key isn't the backspace key (which we should allow)
+				if (unicode<48||unicode>57) //if not a number
+				if (document.category_add.imei_sn.value < 10)
+				return false //disable key press
+				}
+			}
+			function numbersonly5(e){
+			    //alert("hi");
+				var unicode=e.charCode? e.charCode : e.keyCode
+				if (unicode!=8){ //if the key isn't the backspace key (which we should allow)
+				if (unicode<48||unicode>57) //if not a number
+				if (document.category_add.adv_amount.value < 10)
+				return false //disable key press
+				}
+			}
+			function numbersonly6(e){
+			    //alert("hi");
+				var unicode=e.charCode? e.charCode : e.keyCode
+				if (unicode!=8){ //if the key isn't the backspace key (which we should allow)
+				if (unicode<48||unicode>57) //if not a number
+				if (document.category_add.spare_cost.value < 10)
+				return false //disable key press
+				}
+			}
+			
+			    function onlyNumberKey(evt) {
+          
+        // Only ASCII character in that range allowed
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+            return false;
+        return true;
+    }
+			
+	</script>
+	
+	<!--check customer name-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            function getData(empid, divid){
+           //alert(divid);
+                $.ajax({
+                    url: './retail_usernname_check_ajax.php?empid='+empid, //call storeemdata.php to store form data
+                    success: function(html) {
+                        var ajaxDisplay = document.getElementById(divid);
+                        //ajaxDisplay.innerHTML = html;
+                        document.getElementById(divid).value= html;
+                        
+                    }
+                });
+            }
+        </script>
+	<!--check customer name-->
+
+
+<script>
+function generateRow() {
+var c=document.getElementById("reject_reason_lable");
+var d=document.getElementById("reject_reason");
+
+c.innerHTML+="Reject Reason:";
+d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
+
+}
+
+			function showServiceDetails(str) {
+				if (str == "") {
+					document.getElementById("txtHint").innerHTML = "";
+					return;
+				} else { 
+					if (window.XMLHttpRequest) {
+						// code for IE7+, Firefox, Chrome, Opera, Safari
+						xmlhttp = new XMLHttpRequest();
+					} else {
+						// code for IE6, IE5
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+						}
+					}
+					xmlhttp.open("GET","getSerDetails.php?q="+str,true);
+					xmlhttp.send();
+				}
+			}
+</script>
+
+<!-- Script for preventing reload submit entry-->
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+
+
+
+</head>
+<body>
+	<div class="header">
+		
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $session_store_name;?> <span style="font-size:14px; color:yellow;">Powered By DigitalStorz.com</span></span>
+		<div style="float:right; font-family: 'Trebuchet MS', sans-serif; font-weight:bold; font-size:17px; color:#ECFA12; padding-right:15px; padding-top:10px;" ><?php echo $_SESSION['session_staff_name'];?> (<?php echo $_SESSION['session_user_role']?>)</div>
+	</div>
+	
+	<div class="main_container">
+		<?php include("kol-mob-entry-menu.php");?>
+		<div class="right_container">
+			<div class="page_title_div"><h1>JOB SHEET</h1></div>
+			<div class="content_holder">
+
+				<div class="content_holder_heading">&#10039;&nbsp;&nbsp;Add Customer Information &nbsp;&nbsp;&nbsp;<?php echo $mess;?></div>
+				
+				<div class="content_holder_body">
+				<?php
+				      if($transaction=='legal'){
+				    ?>
+				<form name="category_add" method="post" action="./add-cust-mobile.php" onsubmit="return validate()">
+					<table>
+						<tr>
+						<td class="txt_lable">Contact No: <b style="color:red">&#10035;</b></td>
+						<td class="txt_lable">Customer&nbsp;Name:</td>
+						<td class="txt_lable">Alternate Contact No:</td>
+						<td></td>
+						</tr>
+						<tr>
+						<td><input type="text" maxlength="10" name="contact_no" value="<?php echo $cust_contact ?>" onchange="getData(this.value, 'customer_name')"  onkeypress="return onlyNumberKey(event)" onpaste="return false;" ondrop="return false;" autocomplete="off">&nbsp;&nbsp;</td>
+						<td><input type="text" id="customer_name" name="customer_name" value="<?php echo $customer_name ?>" >&nbsp;&nbsp;</td>
+						<td><input type="text" maxlength="10" name="alt_contact_no" value="<?php echo $cust_alt_contact ?>"  onkeypress="return onlyNumberKey(event)" onpaste="return false;" ondrop="return false;" autocomplete="off" >&nbsp;&nbsp;</td>
+						<?php
+						    if($send_sms_to_alt=="sendalt"){
+						?>
+						    <td><input type="checkbox" id="send_sms_alt_cont" name="send_sms_alt_cont" value="sendalt" checked>&nbsp;Send&nbsp;SMS</td>
+						<?php
+						    }else{
+						?>
+						    <td><input type="checkbox" id="send_sms_alt_cont" name="send_sms_alt_cont" value="sendalt" >&nbsp;Send&nbsp;SMS</td>
+						<?php
+						    }
+						?>
+						
+						</tr>
+						<tr>
+						
+						
+						</tr>
+
+						<tr>
+							<input type="hidden" name="hidden_entry_id" value="<?php echo $entry_id?>">
+							<td class="txt_lable">Device Brand & Model No: <b style="color:red">&#10035;</b></td>
+							<td class="txt_lable">Estimated Amount:</td>
+							<td class="txt_lable">IMEI/SN:</td>
+							
+						</tr>
+						<tr>
+							<td><input type="text" name="mobile_name" value="<?php echo $mobile_name ?>" ></td>
+							<td><input  type="text" name="est_amount" value="<?php echo $est_amount ?>" onkeypress="return onlyNumberKey(event)" onpaste="return false;" ondrop="return false;" autocomplete="off"></td>
+							<td><input type="text" name="imei_sn" maxlength="15" value="<?php echo $imei_serial_num; ?>" ></td>
+						</tr>
+						
+						<tr>
+							<td class="txt_lable">Defect 1: <b style="color:red">&#10035;</b></td> 
+						   	<td class="txt_lable">Defect 2:</td>
+						</tr>
+						
+						<tr>
+					<?php
+					$sql_get_pre_def="SELECT `use_preloaded_defects` FROM `stores` WHERE `store_id`=".$_SESSION['session_store_id'];
+				    $query_get_pre_def=mysql_query($sql_get_pre_def);
+		            $result_get_pre_def=mysql_fetch_array($query_get_pre_def);
+		            
+		            $use_custom_defects_value=$result_get_pre_def['use_preloaded_defects'];
+					?>
+					<?php
+					if ($use_custom_defects_value=='yes'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `default_defect` LIKE 'yes' OR `store_id` LIKE ".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";  
+					}elseif($use_custom_defects_value=='no'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `store_id`=".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";
+					}
+						
+						$query_defect_sql=mysql_query($defect_sql);
+						echo "<td><select name='mobile_defect'>";
+						echo "<option value=''> -- SEELCT --</option>";
+						while($result_query_defect_sql=mysql_fetch_array($query_defect_sql)){ 
+							if ($mobile_defect ==$result_query_defect_sql['defect_id']){
+								echo "<option selected ='yes' value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}else{
+								echo "<option value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}
+						}
+						echo "</select></td>";
+
+					?>
+							<!--<td><input type="text" name="mobile_defect" value="<?php echo $mobile_defect ?>" >&nbsp;&nbsp;</td>-->
+							<?php
+							
+					if ($use_custom_defects_value=='yes'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `default_defect` LIKE 'yes' OR `store_id` LIKE ".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";  
+					}elseif($use_custom_defects_value=='no'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `store_id`=".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";
+					}
+						$query_defect_sql=mysql_query($defect_sql);
+						echo "<td ><select name='mobile_defect_2'>";
+						echo "<option value=''> -- SEELCT --</option>";
+						while($result_query_defect_sql=mysql_fetch_array($query_defect_sql)){ 
+							if ($mobile_defect2 ==$result_query_defect_sql['defect_id']){
+								echo "<option selected ='yes' value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}else{
+								echo "<option value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}
+						}
+						echo "</select></td>";
+					?>
+						</tr>
+						<tr>
+						
+							<td class="txt_lable">Defect 3:</td>
+							<td class="txt_lable">Defect 4:</td>
+						</tr>
+						<tr>
+						
+					
+							<!--<td><input type="text" name="mobile_defect" value="<?php echo $mobile_defect ?>" >&nbsp;&nbsp;</td>-->
+							
+							<?php
+					if ($use_custom_defects_value=='yes'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `default_defect` LIKE 'yes' OR `store_id` LIKE ".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";  
+					}elseif($use_custom_defects_value=='no'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `store_id`=".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";
+					}
+						$query_defect_sql=mysql_query($defect_sql);
+						echo "<td ><select name='mobile_defect_3'>";
+						echo "<option value=''> -- SEELCT --</option>";
+						while($result_query_defect_sql=mysql_fetch_array($query_defect_sql)){ 
+							if ($mobile_defect3 ==$result_query_defect_sql['defect_id']){
+								echo "<option selected ='yes' value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}else{
+								echo "<option value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}
+						}
+						echo "</select></td>";
+					?>
+					<?php
+                    if ($use_custom_defects_value=='yes'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `default_defect` LIKE 'yes' OR `store_id` LIKE ".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";  
+					}elseif($use_custom_defects_value=='no'){
+					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `store_id`=".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";
+					}
+						$query_defect_sql=mysql_query($defect_sql);
+						echo "<td ><select name='mobile_defect_4'>";
+						echo "<option value=''> -- SEELCT --</option>";
+						while($result_query_defect_sql=mysql_fetch_array($query_defect_sql)){ 
+							if ($mobile_defect4 ==$result_query_defect_sql['defect_id']){
+								echo "<option selected ='yes' value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}else{
+								echo "<option value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+							}
+						}
+						echo "</select></td>";
+
+					?>
+							</td>
+						</tr>
+						
+					<?php
+					$adv_pay_modes = array(""=>"--SELECT--", "cash"=>"Cash", "card"=>"Credit/Debit Card", "googlepay"=>"Google Pay", "phonepe"=>"Phone Pe", "paytm"=>"Paytm", "otherwallet"=>"Other Wallet", "none"=>"None");
+
+					?>
+						
+						<tr>
+							<td class="txt_lable">Advance Amount:</td>
+							<td class="txt_lable">Remarks:</td>
+							
+						</tr>
+						<tr>
+							<td><input type="text" name="adv_amount" value="<?php echo $adv_amount ?>" onkeypress="return onlyNumberKey(event)" onpaste="return false;" ondrop="return false;" autocomplete="off">&nbsp;&nbsp;</td>
+							<td><input  type="text" name="remarks" value="<?php echo $remarks ?>" ></td>
+						</tr>
+						<tr>
+
+						    <td class="txt_lable">Advance Payment Mode </td>
+						    	<td class="txt_lable">Estimated Delivery:</td>
+						</tr>
+						<tr>
+						    
+						   <td>
+							<select name='adv_payment_mode'>
+							<?php
+							foreach($adv_pay_modes as $pmt_opt_value => $pmt_mod_lable) 
+							{
+							    if($advpay_mode==$pmt_opt_value){
+                               echo '<option value="'.$pmt_opt_value.'" selected>'.$pmt_mod_lable.'</option>';
+							    }else{
+							      echo '<option value="'.$pmt_opt_value.'">'.$pmt_mod_lable.'</option>';  
+							    }
+
+                            }
+							?>
+							</select>
+							</td> 
+							<td><input  type="date" name="exp_delivery" value="<?php echo $exp_delivery ?>" ></td>
+						</tr>
+						
+						<?php
+						if(isset($_REQUEST['entry_id'])){
+						?>
+						<tr>
+							<td class="txt_lable">Spare Cost:</td>
+							<td class="txt_lable" id="reject_reason_lable"></td>
+						</tr>
+						<tr>
+							<td><input type="text" name="spare_cost" value="<?php echo $spare_cost_1; ?>" onkeypress="return onlyNumberKey(event)" ></td>
+							<td id="reject_reason"></td>
+						</tr>
+						<?php
+						}
+						?>
+						
+					</table>
+				
+					<br>
+					<div><?php echo $status_radio; ?></div>
+					<div class="submit_button_div"><input  type="submit" name="<?php echo $btn_name;?>" value="<?php echo $btn_value;?>" /></div>
+				</form>
+                <?php
+				      }elseif($transaction='illegal'){
+				          echo "No Such Transaction Found.";
+				      }
+                ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<?php
+mysql_close($connection);
+}else{
+header('Location: ./index.php');
+}
+?>

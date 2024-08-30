@@ -1,0 +1,14 @@
+[29-Jan-2019 08:57:53 UTC] PHP Notice:  Undefined index: type in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 52
+[29-Jan-2019 08:57:58 UTC] PHP Notice:  Undefined index: type in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 52
+[29-Jan-2019 09:00:03 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 57
+[29-Jan-2019 09:01:12 UTC] PHP Notice:  Undefined index: type in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 58
+[29-Jan-2019 09:01:12 UTC] PHP Notice:  Undefined index: orientation in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 59
+[29-Jan-2019 09:01:12 UTC] PHP Notice:  Undefined index: size in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 60
+[29-Jan-2019 09:01:12 UTC] PHP Notice:  Undefined index: print in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 61
+[29-Jan-2019 09:01:13 UTC] PHP Warning:  imagecreate() expects parameter 1 to be long, string given in /home/kol14747/public_html/Unlocks/Admin/barcode/barcode.php on line 123
+[29-Jan-2019 09:01:13 UTC] PHP Warning:  imagecolorallocate() expects parameter 1 to be resource, null given in /home/kol14747/public_html/Unlocks/Admin/barcode/barcode.php on line 124
+[29-Jan-2019 09:01:13 UTC] PHP Warning:  imagecolorallocate() expects parameter 1 to be resource, null given in /home/kol14747/public_html/Unlocks/Admin/barcode/barcode.php on line 125
+[29-Jan-2019 09:01:13 UTC] PHP Warning:  imagefill() expects parameter 1 to be resource, null given in /home/kol14747/public_html/Unlocks/Admin/barcode/barcode.php on line 127
+[29-Jan-2019 09:01:13 UTC] PHP Warning:  imagepng() expects parameter 1 to be resource, null given in /home/kol14747/public_html/Unlocks/Admin/barcode/barcode.php on line 145
+[29-Jan-2019 09:01:13 UTC] PHP Warning:  imagedestroy() expects parameter 1 to be resource, null given in /home/kol14747/public_html/Unlocks/Admin/barcode/barcode.php on line 146
+[29-Jan-2019 09:18:49 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/kol14747/public_html/Unlocks/Admin/barcode/index.php on line 58
