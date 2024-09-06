@@ -81,11 +81,12 @@ $cust_entry_id=$_REQUEST['job_id'];
         return $result;
     }
 }
-//Code ends
+
 
 ?>
 <html>
     <head>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
         <style>
             .print_inv_tablw{
                 font-family: Calibri;
@@ -115,6 +116,25 @@ $cust_entry_id=$_REQUEST['job_id'];
                 line-height: auto;
                 
             }
+
+            .label-container {
+            font-family: 'Arial', sans-serif;
+            border: 1px dotted #000;
+            width: 250px;
+            padding: 10px;
+            page-break-before: always;
+        }
+        .barcode {
+            margin-bottom: 10px;
+        }
+        .label-text {
+            border-bottom: 1px dotted #000;
+            padding: 2px 0;
+            font-size: 14px;
+        }
+        .bold {
+            font-weight: bold;
+        }
 
         </style>
         <style media="print">
@@ -203,6 +223,9 @@ $cust_entry_id=$_REQUEST['job_id'];
 	                        $query_disp=mysql_query($sql_job_details);
 	                        $result_disp=mysql_fetch_array($query_disp);
 
+                            $damage_images = json_decode(trim($result_disp['damage_images'],'"'));
+                            $damage_description = json_decode(trim($result_disp['damage_description'],'"'));
+
 	                        $defect_sql1="SELECT * FROM `adm_mobile_defects` WHERE `defect_id`=".$result_disp['mobile_defect'];
 	                        $query_defect_query1=mysql_query($defect_sql1);
 	                        $result_disp_result1=mysql_fetch_array($query_defect_query1);
@@ -246,9 +269,42 @@ $cust_entry_id=$_REQUEST['job_id'];
         <div style="font-family: 'Trebuchet MS', sans-serif; padding-left:20px;" >*In case of any Water Damage, customer has to accept the complete risk of the device.</div>
         <div style="font-family: 'Trebuchet MS', sans-serif; padding-left:20px;" >*In case of Software Issues, customer has to accept the complete risk to the data (Data will be wiped off).</div>
         <br><br>
+         <div style="font-family: Calibri;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Damages on Submission:</b></div><br>
+         <?php for($i=0;$i<count($damage_description);$i++){ ?>
+        <div style="font-family: 'Trebuchet MS', sans-serif; padding-left:20px;" ><?=$i+1?>.  <?=$damage_description[$i]?></div>
+        <?php } ?>
+        <br>
         <?php
-    }
+            }
         ?>
+        <br>
+        <div style="font-family: Calibri;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Damage Images:</b></div><br>
+        <div style="font-family: 'Trebuchet MS', sans-serif; padding-left:20px;">
+            <?php for ($i = 0; $i < count($damage_images); $i++) { ?>    
+        <img src="uploads/<?= htmlspecialchars($damage_images[$i]) ?>" alt="Damage Image" style="width: 100px; height: auto; margin-right: 10px; border: 1px solid #ddd; border-radius: 4px;">
+
+<?php } ?>
+</div>
+
+    <div style="display: flex;justify-content: center;align-items:center">
+        <div class="label-container">
+            <svg id="barcode" class="barcode"></svg>
+            <div class="label-text bold">SCM6508</div>
+            <div class="label-text">2021-01-29 11:55:35.0</div>
+            <div class="label-text bold">MRS. JOHN DOE</div>
+            <div class="label-text">9346794004</div>
+            <div class="label-text">MOBILE SS A10</div>
+        </div>
+    </div>
+<script>        
+        JsBarcode("#barcode", "SCM6508", {
+            format: "CODE128",  
+            lineColor: "#000",  
+            width: 2,           
+            height: 40,         
+            displayValue: false 
+        });
+    </script>
     </body>
 </html>
 

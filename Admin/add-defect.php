@@ -26,7 +26,6 @@ if(isset($_REQUEST['use_custom_defects'])){ //When Preloaded Defects check box s
     }
 
 }
-
 if(isset($_REQUEST['submit'])){ //When form Submits
 		$defect_name=$_REQUEST['defect_name'];
         $store_id=$_SESSION['session_store_id'];
@@ -160,8 +159,7 @@ if(isset($_REQUEST['mode'])){
 				</form>
 
 				<br><br>
-				<?php
-			
+				<?php			
 				if($_SESSION['session_user_role'] =='admin'){
 				?>
 				<b>CUSTOM DEFECTS</b>
@@ -178,7 +176,6 @@ if(isset($_REQUEST['mode'])){
 												//$sql_com="SELECT a.mod_id,(SELECT b.company_name from adm_companies b where b.cp_id=a.company_id),a.model_no,a.model_name,a.added_date,a.status FROM `adm_ph_models` a where status='1'";
 												//$sql_com="SELECT a.mod_id,a.company_id,a.model_no,a.model_name,a.added_date,a.status FROM `adm_ph_models` a where status='1'";
 												$sql_com1="SELECT * FROM `adm_mobile_defects` WHERE `store_id`=".$_SESSION['session_store_id']."  ORDER BY defect_id DESC";
-												//echo $sql_com1;
 												$query_com1=mysql_query($sql_com1);
 												while($result_com1=mysql_fetch_array($query_com1)){
 												//print_r($result_com);

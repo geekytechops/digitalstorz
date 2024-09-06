@@ -1,4 +1,4 @@
-<?php 
+<?php
 date_default_timezone_set("Asia/Kolkata");
 error_reporting(0);
 session_start();
@@ -53,11 +53,10 @@ if(isset($_REQUEST['submit'])){ //When form Submits
 		$mobile_name_temp=$_REQUEST['mobile_name'];
 		$mobile_name=ucwords($mobile_name_temp);
 
-		$mobile_defect=json_encode($_REQUEST['mobile_defect']);
-
-		// $mobile_defect2=$_REQUEST['mobile_defect_2'];
-		// $mobile_defect3=$_REQUEST['mobile_defect_3'];
-		// $mobile_defect4=$_REQUEST['mobile_defect_4'];
+		$mobile_defect=$_REQUEST['mobile_defect'][0];
+		$mobile_defect2=$_REQUEST['mobile_defect'][1];
+		$mobile_defect3=$_REQUEST['mobile_defect'][2];
+		$mobile_defect4=$_REQUEST['mobile_defect'][3];
 
 		//echo $mobile_defect;exit;
 		$contact_no=$_REQUEST['contact_no'];
@@ -69,9 +68,25 @@ if(isset($_REQUEST['submit'])){ //When form Submits
 		    $sms_send_cont=$contact_no;
 		}
 
+		$tagsInputValues = json_encode($_REQUEST['tags-input-values']);
+		$damage_images_save = json_encode($_REQUEST['damage_images_save']);
+		
+
 		$imei_sn=$_REQUEST['imei_sn'];
 		$exp_delivery=$_REQUEST['exp_delivery'];
 		$gst_transaction=$_REQUEST['gst_bill'];
+		$defect_description=$_REQUEST['defect_description'];
+		$customer_type=$_REQUEST['customer_type'];
+		$screenlock_type=$_REQUEST['screenlock_type'];
+
+		if($screenlock_type==0){
+			$screen_lock = $_REQUEST['patternlock_data'];
+		}else{
+			$screen_lock = $_REQUEST['screen_lock'];
+		}
+
+		$defect_type=$_REQUEST['defect_type'];
+		$pickup_address=$_REQUEST['pickup_address'];
 		$cust_gst_no=$_REQUEST['customer_gst_no'];
 		$est_amount=$_REQUEST['est_amount'];
 		//$adv_amount=$_REQUEST['adv_amount'];
@@ -83,8 +98,8 @@ if(isset($_REQUEST['submit'])){ //When form Submits
 		$cur_time = date('Y-m-d H:i:s');
 
 		//Inserting Data
-		$sql_ins="INSERT INTO `adm_cust_mob_add`(`customer_name`, `mobile_name`,`cust_contact`,`cust_alt_contact`,`send_sms_to_alt`,`imei_serial_num`,`mobile_defect`,`mobile_defect_2`,`mobile_defect_3`,`mobile_defect_4`,`exp_delivery`,`est_amount`,`adv_amount`,`remarks`,`added_date`,`status`,`rejected`,`delete_status`,`added_by`,`store_id`,`adv_payment_mode`,`gst`,`customer_gst_no`) VALUES 
-		('".$cust_name."','".$mobile_name."','".$contact_no."','".$alt_contact_no."','".$send_sms_alt_cont."','".$imei_sn."','".$mobile_defect."','','','','".$exp_delivery."','".$est_amount."','".$adv_amount."','".$remarks."','".$cur_time ."','Pending', '0','0','".$added_by."','".$store_id."','".$adv_payment_mode."','".$gst_transaction."','".$cust_gst_no."')";
+		$sql_ins="INSERT INTO `adm_cust_mob_add`(`customer_name`, `mobile_name`,`cust_contact`,`cust_alt_contact`,`send_sms_to_alt`,`imei_serial_num`,`mobile_defect`,`mobile_defect_2`,`mobile_defect_3`,`mobile_defect_4`,`damage_description`,`damage_images`,`screenlock_type`,`screen_lock`,`defect_type`,`pickup_address`,`customer_fulfillment_type`,`defect_description`,`actual_amount`,`rejected_reason`,`exp_delivery`,`est_amount`,`adv_amount`,`remarks`,`added_date`,`status`,`rejected`,`delete_status`,`added_by`,`store_id`,`adv_payment_mode`,`gst`,`customer_gst_no`) VALUES 
+		('".$cust_name."','".$mobile_name."','".$contact_no."','".$alt_contact_no."','".$send_sms_alt_cont."','".$imei_sn."','".$mobile_defect."','".$mobile_defect2."','".$mobile_defect3."','".$mobile_defect4."','".$tagsInputValues."','".$damage_images_save."',".$screenlock_type.",'".$screen_lock."',".$defect_type.",'".$pickup_address."',".$customer_type.",'".$defect_description."','0','".$rejected_reason."','".$exp_delivery."','".$est_amount."','".$adv_amount."','".$remarks."','".$cur_time ."','Pending', '0','0','".$added_by."','".$store_id."','".$adv_payment_mode."','".$gst_transaction."','".$cust_gst_no."')";
 		//echo $sql_ins; exit;
 		
 		$mob_def_sql1="SELECT `defect_name` FROM `adm_mobile_defects` WHERE `defect_id`=".$mobile_defect;
@@ -129,14 +144,17 @@ if(isset($_REQUEST['submit'])){ //When form Submits
 		//echo $mobile_defect_name;exit;
 		
 		$query_ins=mysql_query($sql_ins);
+		// echo mysql_error();
+		// die;
 		if($query_ins){
+			$lastInsertedId = mysql_insert_id();
 		    /*if($mobile_defect_name1 !='' && $mobile_defect_name2 !=''){
 		        //$message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name1.', '.$mobile_defect_name2.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you for Visiting Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
 		    }else{
 		        $message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name1.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you for Visiting Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
 		    }*/
 		
-		   $message='Dear '.$cust_name.', We have received your Device '.$mobile_name.', with defect: '.$mobile_defect_name.', on '.$cur_time.'. Estimated charges Rs.'.$est_amount_1.', Adv Recd Rs.'.$adv_amount.'. Thank you for Visiting '.$session_store_name.'. Ph:'.$get_store_contact.'. - DigitalStorz';
+		   $message='Dear '.$cust_name.', We have received your Device '.$mobile_name.', with defect: '.$mobile_defect_name.', on '.$cur_time.'. Estimated charges Rs.'.$est_amount_1.', Adv Recd Rs.'.$adv_amount.'. Thank you for Visiting '.$session_store_name.'. Ph:'.$get_store_contact.'. Please click on the link to download the Job Sheet http://localhost/projectss/digitalstorz/Admin/print-job.php?job_id='.$lastInsertedId.' - DigitalStorz';
 		 //$message='Dear '.$cust_name.', We have received your mobile '.$mobile_name.', with defect: '.$mobile_defect_name.' on '.$cur_time.'. Estimated charges-Rs.'.$est_amount.',Adv Recd - Rs. '.$adv_amount.', Expected Delivery- '.$exp_delivery.'. Thank you for Visiting Kolors Mobile Services. www.kolorsmobileservices.com. Ph: 9032339944 / 9703939944 - KOLORS MOBILE SERVICES.';
 		//echo $message; exit;
 		
@@ -192,11 +210,53 @@ if(isset($_REQUEST['submit'])){ //When form Submits
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         $response = curl_exec($curl);
         curl_close($curl);
+
         //echo $response;
         //sleep (1);
         //exit;
         //echo 'sms less than 200'; exit;
-            header('Location: ./view-cust-mobile-entry.php?result_key=pend&dmsg=jas');
+		// $_REQUEST['job_id'] = 13; 
+		// include('print-job.php');
+?>
+
+<script>
+	    function printContent(entryId) {
+            // Create a new window
+            var printWindow = window.open('', '', 'height=600,width=800');
+
+            // Fetch the content from print-content.php
+            fetch('print-content.php?entry_id=' + entryId)
+                .then(response => response.text())
+                .then(data => {
+                    // Write the fetched content to the new window
+                    printWindow.document.open();
+                    printWindow.document.write('<html><head><title>Print Content</title></head><body>');
+                    printWindow.document.write(data);
+                    printWindow.document.write('</body></html>');
+                    printWindow.document.close();
+
+                    // Trigger the print dialog
+                    printWindow.print();
+
+                    // Close the print window after printing
+                    printWindow.onafterprint = function() {
+                        printWindow.close();
+                        // Redirect to another page after printing
+                        window.location.href = 'your-redirect-page.php';
+                    };
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        }
+
+        // Call the function with the entry ID you want to print
+        window.onload = function() {
+            printContent(16); // Replace 16 with the actual entry ID
+        };
+</script>
+
+<?php
+		header('Location: ./view-cust-mobile-entry.php?result_key=pend&dmsg=jas');
+
 		}else{
 		    //echo "sms expired";exit;
 		    header('Location: ./view-cust-mobile-entry.php?result_key=pend&dmsg=jas');
@@ -240,9 +300,11 @@ if(isset($_REQUEST['submit'])){ //When form Submits
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         $response = curl_exec($curl);
         curl_close($curl);
+
         //echo $response;
         //sleep (1);
         //exit;	 
+		include('print-job.php?entry_id='.$lastInsertedId);
         header('Location: ./view-cust-mobile-entry.php?result_key=pend&dmsg=jas');
 	}
 		}else{
@@ -273,6 +335,7 @@ if(isset($_REQUEST['entry_id'])){
 	$mobile_defect4=$result_disp['mobile_defect_4'];
 	$imei_serial_num=$result_disp['imei_serial_num'];
 	$exp_delivery=$result_disp['exp_delivery'];
+	$defect_description=$result_disp['defect_description'];
 	$est_amount=$result_disp['est_amount'];
 	$adv_amount=$result_disp['adv_amount'];
 	$gst_transaction=$result_disp['gst'];
@@ -284,22 +347,80 @@ if(isset($_REQUEST['entry_id'])){
 	
 	//echo $advpay_mode;
 	//exit;
-	if($status=='Pending')	
-	$status_radio="	<input type='radio' name='entry_status_upd' value='Pending' checked > <font style='font-size:14px'>Pending</font>
-	                
-			        <input type='radio' name='entry_status_upd' value='Completed'> <font style='font-size:14px'>Completed</font>
-			        <input type='radio' name='entry_status_upd' value='Rejected' onclick=generateRow() > <font style='font-size:14px'>Rejected</font> <br>
-			        <input type='checkbox' id='notify_user' name='notify_user' value='notify_user_yes'>
-                    <label for='notify_user' style='font-size:12px'> Notify Changes to customer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Only for Pending Updates)</label>";
-
-	elseif($status=='Completed')
-	$status_radio="	<input type='radio' name='entry_status_upd' value='Pending'> Pending
-			        <input type='radio' name='entry_status_upd' value='Completed' checked> Completed 
-			        <input type='radio' name='entry_status_upd' value='Rejected'> Rejected ";
-	elseif($status=='Rejected')
-	$status_radio="	<input type='radio' name='entry_status_upd' value='Pending'> Pending
-			        <input type='radio' name='entry_status_upd' value='Completed'> Completed 
-			        <input type='radio' name='entry_status_upd' value='Rejected' checked> Rejected ";
+	if ($status == 'Pending') {
+		$status_radio = "
+		<div class='d-flex col-md-6 mb-2 mt-4'>
+			<div class='form-check'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Pending' id='entry_status_upd1' checked>
+				<label class='form-check-label' for='entry_status_upd1'>
+					Pending
+				</label>
+			</div>
+			<div class='form-check ms-3'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Completed' id='entry_status_upd2'>
+				<label class='form-check-label' for='entry_status_upd2'>
+					Completed
+				</label>
+			</div>
+			<div class='form-check ms-3'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Rejected' id='entry_status_upd3'>
+				<label class='form-check-label' for='entry_status_upd3'>
+					Rejected
+				</label>
+			</div>
+		</div>
+		<div class='form-check'>
+			<input class='form-check-input' type='checkbox' id='notify_user' name='notify_user' value='notify_user_yes'>
+			<label class='form-check-label' for='notify_user' style='font-size:12px'>
+				Notify Changes to customer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Only for Pending Updates)
+			</label>
+		</div>";
+	} elseif ($status == 'Completed') {
+		$status_radio = "
+		<div class='d-flex col-md-6 mb-2'>
+			<div class='form-check'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Pending' id='entry_status_upd1'>
+				<label class='form-check-label' for='entry_status_upd1'>
+					Pending
+				</label>
+			</div>
+			<div class='form-check ms-3'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Completed' id='entry_status_upd2' checked>
+				<label class='form-check-label' for='entry_status_upd2'>
+					Completed
+				</label>
+			</div>
+			<div class='form-check ms-3'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Rejected' id='entry_status_upd3'>
+				<label class='form-check-label' for='entry_status_upd3'>
+					Rejected
+				</label>
+			</div>
+		</div>";
+	} elseif ($status == 'Rejected') {
+		$status_radio = "
+		<div class='d-flex col-md-6 mb-2'>
+			<div class='form-check'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Pending' id='entry_status_upd1'>
+				<label class='form-check-label' for='entry_status_upd1'>
+					Pending
+				</label>
+			</div>
+			<div class='form-check ms-3'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Completed' id='entry_status_upd2'>
+				<label class='form-check-label' for='entry_status_upd2'>
+					Completed
+				</label>
+			</div>
+			<div class='form-check ms-3'>
+				<input class='form-check-input' type='radio' name='entry_status_upd' value='Rejected' id='entry_status_upd3' checked>
+				<label class='form-check-label' for='entry_status_upd3'>
+					Rejected
+				</label>
+			</div>
+		</div>";
+	}
+	
 			
 	
 					
@@ -319,10 +440,10 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 		    $sms_send_cont=$contact_no;
 		}
 		$imei_serial_num=$_REQUEST['imei_sn'];
-		$mobile_defect=$_REQUEST['mobile_defect'];
-		$mobile_defect2=$_REQUEST['mobile_defect_2'];
-		$mobile_defect3=$_REQUEST['mobile_defect_3'];
-		$mobile_defect4=$_REQUEST['mobile_defect_4'];
+		$mobile_defect=$_REQUEST['mobile_defect'][0];
+		$mobile_defect2=$_REQUEST['mobile_defect'][1];
+		$mobile_defect3=$_REQUEST['mobile_defect'][2];
+		$mobile_defect4=$_REQUEST['mobile_defect'][3];
 		$exp_delivery=$_REQUEST['exp_delivery'];
 		$est_amount=$_REQUEST['est_amount'];
 		$gst_transaction=$_REQUEST['gst_bill'];
@@ -332,6 +453,19 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 		$remarks=$_REQUEST['remarks'];
 		$entry_status_upd=$_REQUEST['entry_status_upd'];
 		$adv_payment_mode =$_REQUEST['adv_payment_mode'];
+
+		$defect_description=$_REQUEST['defect_description'];
+		$customer_type=$_REQUEST['customer_type'];
+		// $screenlock_type=$_REQUEST['screenlock_type'];
+
+		// if($screenlock_type==0){
+		// 	$screen_lock = $_REQUEST['patternlock_data'];
+		// }else{
+		// 	$screen_lock = $_REQUEST['screen_lock'];
+		// }
+
+		$defect_type=$_REQUEST['defect_type'];
+		$pickup_address=$_REQUEST['pickup_address'];
 		
 		
 		if(isset($_REQUEST['rejected_reason'])){
@@ -361,6 +495,10 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 									`mobile_defect_2`='".$mobile_defect2."',
 									`mobile_defect_3`='".$mobile_defect3."',
 									`mobile_defect_4`='".$mobile_defect4."',
+									`defect_type`= ".$defect_type.",
+									`pickup_address`= '".$pickup_address."',
+									`customer_fulfillment_type`= ".$customer_type.",
+									`defect_description`= '".$defect_description."', 
 									`exp_delivery`='".$exp_delivery."',
 									`est_amount`='".$est_amount."',
 									`adv_amount`='".$adv_amount."',
@@ -524,9 +662,29 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
         <link href="../panel-assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
 		<link href="../panel-assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+			
+		<link href="../panel-assets/css/patternlock.css" id="app-style" rel="stylesheet" type="text/css" />
+<style>
 
-		<link href="../panel-assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+	.pattern_lock{
+		display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+	}
+	        #lock {
+            width: 280px;
+            height: calc(100% - 15vh);
+            padding-bottom: 12vh;
+            min-height: 120px;
+        }
 
+        .stars {
+            margin: auto;
+            display: block;
+        }
+</style>
 
 	<!-- For Menu-->
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
@@ -541,6 +699,11 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
             // Form validation code for SIGN UP
         function validate()
             {
+
+				var selectedPattern = p.getPattern();
+				$('#patternlock_data').val(selectedPattern);
+
+				console.log($('#tags-input').val());
 		
 		if (document.category_add.contact_no.value == "")
                 {
@@ -622,6 +785,7 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
                     document.category_add.adv_payment_mode.focus();
                      return false;
                 }
+			
                 
 
             }
@@ -797,34 +961,42 @@ d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
 				      if($transaction=='legal'){
 				    ?>
 				<form name="category_add" method="post" action="./add-cust-mobile-dev.php" onsubmit="return validate()">
-					<div class="d-flex">	
-						<div class="form-check">
-						<input class="form-check-input" type="radio" name="customer_type" id="customer_type1" checked>
-						<label class="form-check-label" for="customer_type1">
-							Walk In
-						</label>
+					<div class="row">
+						<div class="col-md-6">
+					<div class="row mb-2 d-flex flex-column">	
+						<div class="d-flex col-md-6 mb-2">	
+							<div class="form-check">
+							<input class="form-check-input" type="radio" name="customer_type" value='0' id="customer_type1" onclick="toggleAddress()" checked>
+							<label class="form-check-label" for="customer_type1">
+								Walk In
+							</label>
+							</div>
+							<div class="form-check ms-3">
+							<input class="form-check-input" type="radio" value='1' name="customer_type" id="customer_type2" onclick="toggleAddress()" >
+							<label class="form-check-label" for="customer_type2">
+								Pick Up
+							</label>
+							</div>
 						</div>
-						<div class="form-check ms-3">
-						<input class="form-check-input" type="radio" name="customer_type" id="customer_type2">
-						<label class="form-check-label" for="customer_type2">
-							Pick Up
-						</label>
+						<div class="col-md-4" id="pickup_address_div" style="display:none;">
+							<label for="pickup_address">Address</label>
+							<textarea name="pickup_address" id="pickup_address" class="form-control"></textarea>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<label for="contact_no" maxlength="10" class="form-label">Contact No: <b style="color:red">&#10035;</b></label>
 							<input type="number" class="form-control" name="contact_no" id="contact_no" value="<?php echo $cust_contact ?>" onchange="getData(this.value, 'customer_name')"   ondrop="return false;" autocomplete="off" required required pattern="[0-9]{10}" onkeypress="if(this.value.length==10) return false;"  onkeydown="javascript: return (event.keyCode == 69 || event.keyCode == 190 || event.keyCode == 189 || event.keyCode == 187) ? false : true">
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<label for="customer_name" class="form-label">Customer Name <b style="color:red">&#10035;</b></label>
 							<input type="text" class="form-control" name="customer_name" id="customer_name" value="<?php echo $customer_name ?>">
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<label for="alt_contact_no" class="form-label">Alternate Contact No: </label>
 							<input type="text" class="form-control" name="alt_contact_no" id="alt_contact_no" value="<?php echo $cust_alt_contact ?>"   onpaste="return false;" ondrop="return false;" autocomplete="off" pattern="[0-9]{10}" onkeypress="if(this.value.length==10) return false;"  onkeydown="javascript: return (event.keyCode == 69 || event.keyCode == 190 || event.keyCode == 189 || event.keyCode == 187) ? false : true">
 						</div>
-						<div class="mt-3 form-group col-md-2">
+						<div class="mt-3 form-group col-md-3">
 						<?php
 						    if($send_sms_to_alt=="sendalt"){
 						?>
@@ -847,23 +1019,48 @@ d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
 						    }
 						?>
 						</div>
-						</div>
+					</div>
 						<div class="row mt-4">
-						<div class="col-md-2">
+						<div class="col-md-4">
+						<input type="hidden" name="hidden_entry_id" value="<?php echo $entry_id?>">
 							<label for="alt_contact_no" class="form-label">Device Brand & Model No: </label>
 							<input type="text" name="mobile_name" class="form-control" value="<?php echo $mobile_name ?>" >
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<label for="alt_contact_no" class="form-label">Estimated Amount: </label>
 							<input  type="number" name="est_amount" class="form-control" value="<?php echo $est_amount ?>" onkeypress="return onlyNumberKey(event)" onkeydown="return event.keyCode !== 69" onpaste="return false;" ondrop="return false;" autocomplete="off">
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-4">
 							<label for="alt_contact_no" class="form-label">IMEI/SN: </label>
 							<input type="text" name="imei_sn" class="form-control" maxlength="15" value="<?php echo $imei_serial_num; ?>" >
-						</div>			
-						<div class="col-md-2">
+						</div>
+						</div>
+						
+							<?php 
+							
+							$selectDefectType = "SELECT defect_type from `adm_cust_mob_add` WHERE store_id = ".$_SESSION['session_store_id']."  order by entry_id DESC LIMIT 1";
+							$selectDefectTypeQry = mysql_query($selectDefectType);
+							$selectDefectTypeRes = mysql_fetch_array($selectDefectTypeQry);
+							?>
+
+						<div class="row mt-4">
+						<div class="col-md-12 d-flex mb-4">
+							<div class="form-check">
+							<input class="form-check-input" type="radio" name="defect_type" value='0' id="defect_type1" onclick="toggleDefect()" <?= $selectDefectTypeRes['defect_type']==0 ? 'checked' : '' ?>>
+							<label class="form-check-label" for="defect_type1">
+								Defect Dropdowns
+							</label>
+							</div>
+							<div class="form-check ms-3">
+							<input class="form-check-input" type="radio" value='1' name="defect_type" id="defect_type2" onclick="toggleDefect()" <?= $selectDefectTypeRes['defect_type']==1 ? 'checked' : '' ?>>
+							<label class="form-check-label" for="defect_type2">
+								Manual Entry
+							</label>
+							</div>
+						</div>
+						<div class="col-md-6" id="defectSelect_div" style="display:<?= $selectDefectTypeRes['defect_type']==0 ? 'block' : 'none' ?>">
 							<label class="form-label">Defect Select</label>
-							<select class="select2 form-control select2-multiple" multiple="multiple" name="mobile_defect[]" multiple data-placeholder="Choose ...">
+							<select class="select2 form-control select2-multiple" multiple="multiple" name="mobile_defect[]" id="defectSelect" multiple data-placeholder="Choose ...">
 						<?php
 					$sql_get_pre_def="SELECT `use_preloaded_defects` FROM `stores` WHERE `store_id`=".$_SESSION['session_store_id'];
 				    $query_get_pre_def=mysql_query($sql_get_pre_def);
@@ -877,11 +1074,10 @@ d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
 					}elseif($use_custom_defects_value=='no'){
 					  $defect_sql="SELECT * FROM `adm_mobile_defects` WHERE `store_id`=".$_SESSION['session_store_id']."  ORDER BY `defect_name` ASC";
 					}
-						
 						$query_defect_sql=mysql_query($defect_sql);
-						while($result_query_defect_sql=mysql_fetch_array($query_defect_sql)){ 
-							if ($mobile_defect ==$result_query_defect_sql['defect_id']){
-								echo "<option selected ='yes' value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
+						while($result_query_defect_sql=mysql_fetch_array($query_defect_sql)){ 									
+							if ($mobile_defect ==$result_query_defect_sql['defect_id'] || $mobile_defect2 ==$result_query_defect_sql['defect_id'] || $mobile_defect3 ==$result_query_defect_sql['defect_id'] || $mobile_defect4 ==$result_query_defect_sql['defect_id']){
+								echo "<option selected ='selected' value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
 							}else{
 								echo "<option value=".$result_query_defect_sql['defect_id'].">".$result_query_defect_sql['defect_name']."</option>";
 							}
@@ -891,14 +1087,18 @@ d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
 									<option value="AK">Alaska</option>
 									<option value="HI">Hawaii</option>
 							</select>
-						</div>	
+						</div>
+						<div class="col-md-6" style="display:<?= $selectDefectTypeRes['defect_type']==1 ? 'block' : 'none' ?>" id="defect_description_div">
+							<label for="defect_description">Enter the Defect Description</label>
+							<textarea name="defect_description" id="defect_description" class="form-control" ><?=$defect_description?></textarea>
+						</div>
 						</div>	
 						<div class="row mt-4">
-						<div class="col-md-2">
+						<div class="col-md-6">
 							<label class="form-label">Advance Amount:</label>
 							<input type="text" name="adv_amount" class="form-control" value="<?php echo $adv_amount ?>" onkeypress="return onlyNumberKey(event)" onpaste="return false;" ondrop="return false;" autocomplete="off">
 						</div>	
-						<div class="col-md-2">
+						<div class="col-md-6">
 							<label class="form-label">Remarks:</label>
 							<input  type="text" name="remarks" class="form-control" value="<?php echo $remarks ?>" >
 						</div>	
@@ -907,7 +1107,7 @@ d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
 					$adv_pay_modes = array(""=>"--SELECT--", "cash"=>"Cash", "card"=>"Credit/Debit Card", "googlepay"=>"Google Pay", "phonepe"=>"Phone Pe", "paytm"=>"Paytm", "otherwallet"=>"Other Wallet", "none"=>"None");
 
 					?>
-						<div class="col-md-2">
+						<div class="col-md-6">
 							<label class="form-label">Advance Payment Mode:</label>
 							<select name='adv_payment_mode' class="form-select">
 							<?php
@@ -923,12 +1123,98 @@ d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
 							?>
 							</select>
 						</div>	
-						<div class="col-md-2">
+						<div class="col-md-6">
 							<label class="form-label">Estimated Delivery:</label>
 							<input  type="text" id="date_picker" name="exp_delivery" class="form-control" value="<?php echo $exp_delivery ?>" >
 						</div>			
 						<div><?php echo $status_radio; ?></div>
-					<div class="mt-4"><input class="btn btn-primary" type="submit" name="<?php echo $btn_name;?>" value="<?php echo $btn_value;?>" /></div>												
+					<div class="mt-4"><input class="btn btn-primary" type="submit" name="<?php echo $btn_name;?>" value="<?php echo $btn_value;?>" /></div>		
+					
+					</div>
+					</div>
+					</div>
+					<?php if(!isset($_REQUEST['entry_id'])){ ?>
+						<div class="col-md-6 mb-4">
+							<div>
+								<h5 class="text-center">Add Screen Lock</h5>
+								<h6 class="text-center">Screen Lock Type</h6>
+							</div>
+							<div style="display: flex;justify-content: center;">
+								<div class="form-check">
+								<input class="form-check-input" type="radio" name="screenlock_type" value='0' id="screenlock_type1" onclick="toggleScreenlock()" checked>
+								<label class="form-check-label" for="screenlock_type1">
+									Pattern
+								</label>
+								</div>
+								<div class="form-check ms-3">
+								<input class="form-check-input" type="radio" value='1' name="screenlock_type" id="screenlock_type2" onclick="toggleScreenlock()" >
+								<label class="form-check-label" for="screenlock_type2">
+									Pin
+								</label>
+								</div>
+							</div>
+							<div class="row flex-column align-items-center">
+							<div class="col-md-6 pattern_lock" id="pattern_lock">
+							<!-- <label for="pin-lock">Pattern Lock</label> -->
+								<svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+									<g class="lock-actives"></g>
+									<g class="lock-lines"></g>
+									<g class="lock-dots">
+										<circle cx="20" cy="20" r="1"/>
+										<circle cx="50" cy="20" r="1"/>
+										<circle cx="80" cy="20" r="1"/>
+
+										<circle cx="20" cy="50" r="1"/>
+										<circle cx="50" cy="50" r="1"/>
+										<circle cx="80" cy="50" r="1"/>
+
+										<circle cx="20" cy="80" r="1"/>
+										<circle cx="50" cy="80" r="1"/>
+										<circle cx="80" cy="80" r="1"/>
+									</g>
+								<svg>
+							</div>
+							<div class="col-md-6 text-center" id="pin_lock" style="display:none">
+								<!-- <label for="pin-lock" class="mt-4">Pin Lock</label> -->
+								<input type="text" name="pin-lock" id="pin-lock" class="form-control mt-4" name="screen_lock">
+								<input type="hidden" name="patternlock_data" id="patternlock_data">
+							</div>
+							<div class="col-md-12">
+							<div class="accordion" id="accordionExample">                                            
+									<div class="accordion-item">
+										<h2 class="accordion-header" id="headingThree">
+											<button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+												 Mobile Damages
+											</button>
+										</h2>
+										<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+											<div class="accordion-body">
+												<div class="text-muted">
+												<label for="tags-input">Enter the Damages</label>
+												<input type="hidden" name="tags-input-values" id="tags-input-values">
+													<div class="tags-input-wrapper">														
+														<input type="text" name="tags-input" id="tags-input" placeholder="Add a tag...">
+													</div>
+													<div class="col-md-12 mt-2">
+														<div class="d-flex flex-column">
+															<label for="upload_damages">Upload Mobile Damage Images</label>
+															<input type="file" name="upload_damages" id="upload_damages" multiple accept=".jpeg, .jpg, .png">
+														</div>
+														<div>
+															<div id="error-message" class="text-danger mt-2"></div>
+															<div id="preview-images" class="mt-3"></div>
+															<input type="hidden" name="damage_images_save" id="damage_images_save">
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+                                </div>
+							</div>
+						</div>
+						<?php } ?>										
 				</form>
                 <?php
 				      }elseif($transaction='illegal'){
@@ -940,7 +1226,117 @@ d.innerHTML+="<input type='text' name='rejected_reason' value=''>";
 		</div>
 	</div>
 	<script src="../panel-assets/libs/select2/js/select2.min.js"></script>
+	<script src="../panel-assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="../panel-assets/js/app.js"></script>
+	<script src="../panel-assets/js/patternlock.js"></script>
+	<script>
+		const toggleAddress = () =>{			
+			if($('input[name="customer_type"]:checked').val()==1){
+				$('#pickup_address_div').show();
+			}else{
+				$('#pickup_address_div').hide();
+			}
+		}
+		
+		const toggleDefect = () =>{			
+			if($('input[name="defect_type"]:checked').val()==1){
+				$('#defectSelect_div').hide();
+				$('#defect_description_div').show();
+			}else{
+				$('#defect_description_div').hide();
+				$('#defectSelect_div').show();
+			}
+		}
+
+		const toggleScreenlock = () =>{			
+			if($('input[name="screenlock_type"]:checked').val()==0){
+				$('#pin_lock').hide();
+				$('#pattern_lock').css('display','flex');
+			}else{
+				$('#pin_lock').show();
+				$('#pattern_lock').hide();
+			}
+		}
+
+		var e = document.getElementById('lock')
+    var p = new PatternLock(e, {
+        onPattern: function(pattern) {
+            this.pattern = pattern;
+        }
+    });
+
+	let imagesArray = [];
+
+const fileInput = document.getElementById('upload_damages');
+const errorMessage = document.getElementById('error-message');
+const previewImages = document.getElementById('preview-images');
+
+fileInput.addEventListener('change', function() {
+    // Clear previous error messages and image previews
+    errorMessage.textContent = '';
+    previewImages.innerHTML = '';
+
+    const files = fileInput.files;
+
+    // Check if files are selected
+    if (files.length === 0) {
+        errorMessage.textContent = 'Please select at least one image.';
+        return;
+    }
+
+    // Validate file types and store images in the array
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        // Check for valid image formats
+        if (!['image/jpeg', 'image/png'].includes(file.type)) {
+            errorMessage.textContent = 'Only JPEG and PNG formats are allowed.';
+            return;
+        }
+
+        // Add the image file to the array
+        imagesArray.push(file);
+
+        // Preview the selected images
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imgElement = document.createElement('img');
+            imgElement.src = e.target.result;
+            imgElement.alt = file.name;
+            imgElement.style.width = '100px';
+            imgElement.style.marginRight = '10px';
+            previewImages.appendChild(imgElement);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Send images to the backend via AJAX
+    sendImagesToBackend(imagesArray);
+});
+
+// Function to send images to the backend
+function sendImagesToBackend(images) {
+    const formData = new FormData();
+    images.forEach((image, index) => {
+        formData.append('images[]', image, image.name);
+    });
+
+    $.ajax({
+        url: 'uploads.php', // Change this to your PHP file path
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $('#damage_images_save').val(response);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error uploading images:', textStatus, errorThrown);
+        }
+    });
+}
+
+	</script>
 </body>
 </html>
 <?php

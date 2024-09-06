@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+session_start();
  date_default_timezone_set("Asia/Kolkata");
 $username = "root";  //chanege if needed
 $password = "";  //chanege if needed

@@ -35,9 +35,9 @@ if(isset($_REQUEST['submit'])){
     VALUES 
     ('".$user_role."','".$username_retail."','".$hashed_password."','".$staff_name."','".$username_retail."','".$staff_email."','0',NOW(),'".$referal_code."' )";
     
-   //echo $sql_user_ins;exit;
-   $query_user_ins=mysql_query($sql_user_ins);
    
+   $query_user_ins=mysql_query($sql_user_ins);
+   echo mysql_error();die;
    if($query_user_ins){
        	header('Location: ./Admin/index.php?reg=success');
    }else{

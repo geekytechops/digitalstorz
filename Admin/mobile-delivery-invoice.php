@@ -426,172 +426,172 @@ if(isset($_REQUEST['submit'])){
 				<div class="content_holder_heading">&#8803;&nbsp;&nbsp;Delivery Invoice &nbsp;&nbsp;&nbsp;<?php echo $mess;?></div>
 				
 				<div class="content_holder_body">
-				<?php
-				      if($transaction=='legal'){
-				?>
-				<form name="category_add" method="post" action="./mobile-delivery-invoice.php" onsubmit="return validate()">
-				
-				<?php
-				if(isset($_REQUEST['del_type']) && $_REQUEST['del_type']=="inst"){
-					echo '<input type="hidden" name="del_type_form" value="inst_del_yes" >';
-				}
-				?>
-				
-					<table>
-						<tr>
-							<td class="txt_lable">Customer&nbsp;Name:</td>
-							<td class="txt_lable">Mobile name & Model No:</td>
-						</tr>
-						<tr>
-							<td><input type="text" disabled="yes" name="customer_name" value="<?php echo $customer_name ?>" >&nbsp;&nbsp;</td>
-							<td><input type="text" disabled="yes" name="mobile_name" value="<?php echo $mobile_name ?>" ></td>
-						</tr>
-						
-						<tr>
-							<td class="txt_lable">Defect:</td> 
-							<td class="txt_lable">Expected Delivery: YYYY-MM-DD</td>
-						</tr>
-						<tr>
-							<td><input type="text" disabled="yes" name="mobile_defect" value="<?php echo $mob_def_result['defect_name'].$defect_2.$defect_3?>" >&nbsp;&nbsp;</td>
-							<td><input  type="text" disabled="yes" name="exp_delivery" value="<?php echo $exp_delivery ?>" ></td>
-						</tr>
-						
-						<tr>
-							<td class="txt_lable">Contact No:</td>
-							<td class="txt_lable">Remarks:</td>
+					<?php
+						if($transaction=='legal'){
+					?>
+					<form name="category_add" method="post" action="./mobile-delivery-invoice.php" onsubmit="return validate()">
+					
+					<?php
+					if(isset($_REQUEST['del_type']) && $_REQUEST['del_type']=="inst"){
+						echo '<input type="hidden" name="del_type_form" value="inst_del_yes" >';
+					}
+					?>
+					
+						<table>
+							<tr>
+								<td class="txt_lable">Customer&nbsp;Name:</td>
+								<td class="txt_lable">Mobile name & Model No:</td>
+							</tr>
+							<tr>
+								<td><input type="text" disabled="yes" name="customer_name" value="<?php echo $customer_name ?>" >&nbsp;&nbsp;</td>
+								<td><input type="text" disabled="yes" name="mobile_name" value="<?php echo $mobile_name ?>" ></td>
+							</tr>
 							
-						</tr>
-						<tr>
-							<td><input type="text" disabled="yes" name="contact_no" value="<?php echo $cust_contact ?>" >&nbsp;&nbsp;</td>
-							<td><input  type="text" name="remarks" value="<?php echo $remarks ?>" ></td>
-						</tr>
-						
-						<tr>
-							<td class="txt_lable">Estimated Amount:</td>
-							<td class="txt_lable">Advance Amount:</td>
+							<tr>
+								<td class="txt_lable">Defect:</td> 
+								<td class="txt_lable">Expected Delivery: YYYY-MM-DD</td>
+							</tr>
+							<tr>
+								<td><input type="text" disabled="yes" name="mobile_defect" value="<?php echo $mob_def_result['defect_name'].$defect_2.$defect_3?>" >&nbsp;&nbsp;</td>
+								<td><input  type="text" disabled="yes" name="exp_delivery" value="<?php echo $exp_delivery ?>" ></td>
+							</tr>
 							
-						</tr>
-						<tr>
-						    <input type="hidden" name="adv_amount_hidden" value="<?php echo $adv_amount ?>" >
-							<td><input  type="text" disabled="yes" name="est_amount" value="<?php echo $est_amount ?>" ></td>
-							<td><input type="text" disabled="yes" id="adv_amount" name="adv_amount" value="<?php echo $adv_amount ?>" >&nbsp;&nbsp;</td><td><span style="color:red;"><b><?php echo  $return_amount; ?></b></span></td>
-						</tr>
-						<tr>
-							<td class="txt_lable">Actual / Final Amount:</td>
-							<!--<td class="txt_lable">Adjustments:</td>-->
-							<td class="txt_lable">JOB ID</td>
+							<tr>
+								<td class="txt_lable">Contact No:</td>
+								<td class="txt_lable">Remarks:</td>
+								
+							</tr>
+							<tr>
+								<td><input type="text" disabled="yes" name="contact_no" value="<?php echo $cust_contact ?>" >&nbsp;&nbsp;</td>
+								<td><input  type="text" name="remarks" value="<?php echo $remarks ?>" ></td>
+							</tr>
 							
-						</tr>
-						<tr>
-							<td><input  type="number" id="actual_amount" onblur="cal_bal()" name="actual_amount" value="<?php echo $est_amount ?>" onpaste="return false;" ondrop="return false;" autocomplete="off" onkeypress="return onlyNumberKey(event)"></td>
-							<!--<td><input type="text"  id="adjustments" onblur="cal_bal()" name="adjustments" value="" >&nbsp;&nbsp;</td> -->
-							<td><input type="text" readonly="yes" name="entry_id_cust" value="<?php echo $entry_id;?>" ></td>
-						</tr>
-						<tr>
-							<td class="txt_lable">Balance Amount:</td>
+							<tr>
+								<td class="txt_lable">Estimated Amount:</td>
+								<td class="txt_lable">Advance Amount:</td>
+								
+							</tr>
+							<tr>
+								<input type="hidden" name="adv_amount_hidden" value="<?php echo $adv_amount ?>" >
+								<td><input  type="text" disabled="yes" name="est_amount" value="<?php echo $est_amount ?>" ></td>
+								<td><input type="text" disabled="yes" id="adv_amount" name="adv_amount" value="<?php echo $adv_amount ?>" >&nbsp;&nbsp;</td><td><span style="color:red;"><b><?php echo  $return_amount; ?></b></span></td>
+							</tr>
+							<tr>
+								<td class="txt_lable">Actual / Final Amount:</td>
+								<!--<td class="txt_lable">Adjustments:</td>-->
+								<td class="txt_lable">JOB ID</td>
+								
+							</tr>
+							<tr>
+								<td><input  type="number" id="actual_amount" onblur="cal_bal()" name="actual_amount" value="<?php echo $est_amount ?>" onpaste="return false;" ondrop="return false;" autocomplete="off" onkeypress="return onlyNumberKey(event)"></td>
+								<!--<td><input type="text"  id="adjustments" onblur="cal_bal()" name="adjustments" value="" >&nbsp;&nbsp;</td> -->
+								<td><input type="text" readonly="yes" name="entry_id_cust" value="<?php echo $entry_id;?>" ></td>
+							</tr>
+							<tr>
+								<td class="txt_lable">Balance Amount:</td>
+								<?php
+								if(isset($_REQUEST['action']) && $_REQUEST['action']='inst_rej_del'){ 
+								?>
+								<td class="txt_lable">Reject Reason:</td>
+								<?php
+								}
+								?>
+							</tr>
+							<tr>
+								
+								<?php $bal=$est_amount-$adv_amount; ?>
+								<td><input  type="text" id="bal_amt" disabled="yes" name="bal_amt" value="<?php echo $bal;?>" onkeypress="return numbersonly3(event)"></td>
+								<?php
+								if(isset($_REQUEST['action']) && $_REQUEST['action']='inst_rej_del'){ 
+								?>
+								<td><input  type="text" id="inst_rej_reason" name="inst_rej_reason" value="" ></td>
+								<?php
+								}
+								?>
+							</tr>
+							<input type="hidden" name="rejected_in_db" value="<?php echo $rejected;?>">
 							<?php
-							if(isset($_REQUEST['action']) && $_REQUEST['action']='inst_rej_del'){ 
-							?>
-							<td class="txt_lable">Reject Reason:</td>
-							<?php
-							}
-							?>
-						</tr>
-						<tr>
 							
-							<?php $bal=$est_amount-$adv_amount; ?>
-							<td><input  type="text" id="bal_amt" disabled="yes" name="bal_amt" value="<?php echo $bal;?>" onkeypress="return numbersonly3(event)"></td>
-							<?php
-							if(isset($_REQUEST['action']) && $_REQUEST['action']='inst_rej_del'){ 
+								if($order_status !="Rejected"){
 							?>
-							<td><input  type="text" id="inst_rej_reason" name="inst_rej_reason" value="" ></td>
+							<tr>
+								<td class="txt_lable">Payment Mode</td>
+								<!--<td class="txt_lable">Send Receipt To Customer</td>-->
+							</tr>
+							
+							<tr>
+								<td>
+								<select name='payment_mode'>
+								<option value="">--SELECT--</option>
+								<option value="cash">Cash</option>
+								<option value="card">Credit/Debit Card</option>
+								<option value="googlepay">Google Pay</option>
+								<option value="phonepe">Phone Pe</option>
+								<option value="paytm">Paytm</option>
+								<option value="otherwallet">Other Wallet</option>
+								<option value="none">None</option>
+								</select>
+								</td>
+								<!--<td>
+									<input type='radio' name='send_invoice_cust' value='send_receipt' checked> YES
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' name='send_invoice_cust' value='dontsend_receipt' > NO
+								</td>-->
+							</tr>
 							<?php
-							}
+								}
 							?>
-						</tr>
-						<input type="hidden" name="rejected_in_db" value="<?php echo $rejected;?>">
-                        <?php
-                        
-                            if($order_status !="Rejected"){
-                        ?>
-						<tr>
-							<td class="txt_lable">Payment Mode</td>
-							<!--<td class="txt_lable">Send Receipt To Customer</td>-->
-						</tr>
-                        
-						<tr>
+							<tr>
+								<td class="txt_lable">Device Repair Done By</td>
+								<td class="txt_lable">Spare Cost</td>
+							</tr>
+							<tr>
 							<td>
-							<select name='payment_mode'>
-							<option value="">--SELECT--</option>
-							<option value="cash">Cash</option>
-							<option value="card">Credit/Debit Card</option>
-							<option value="googlepay">Google Pay</option>
-							<option value="phonepe">Phone Pe</option>
-							<option value="paytm">Paytm</option>
-							<option value="otherwallet">Other Wallet</option>
-							<option value="none">None</option>
-							</select>
+							
+							
+							<?php
+							$sql_users_list="SELECT * FROM `cust_kolors_users_list` WHERE `status`=1 AND `store_id`=".$store_id;
+							//echo $sql_users_list;
+							$query_users_list=mysql_query($sql_users_list);
+							echo "<select name='repair_by_name'>";
+							echo "<option value=''>--SELECT--</option>";
+							while($result_users_list=mysql_fetch_array($query_users_list)){
+								if($repair_by==$result_users_list['username']){
+								?>
+									<option value="<?php echo $result_users_list['username']; ?>" selected><?php echo $result_users_list['staff_name']; ?> </option>
+								<?php     
+								}else{
+								?>
+									<option value="<?php echo $result_users_list['username']; ?>"><?php echo $result_users_list['staff_name']; ?> </option>
+								<?php 
+								}
+							
+							}
+							echo "</select>";
+							?>
 							</td>
-							<!--<td>
-								<input type='radio' name='send_invoice_cust' value='send_receipt' checked> YES
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' name='send_invoice_cust' value='dontsend_receipt' > NO
-							</td>-->
-						</tr>
-						<?php
-                            }
-                        ?>
-						<tr>
-							<td class="txt_lable">Device Repair Done By</td>
-							<td class="txt_lable">Spare Cost</td>
-						</tr>
-						<tr>
-						<td>
-						
-						
-						<?php
-						$sql_users_list="SELECT * FROM `cust_kolors_users_list` WHERE `status`=1 AND `store_id`=".$store_id;
-						//echo $sql_users_list;
-	                    $query_users_list=mysql_query($sql_users_list);
-	                    echo "<select name='repair_by_name'>";
-	                    echo "<option value=''>--SELECT--</option>";
-	                    while($result_users_list=mysql_fetch_array($query_users_list)){
-	                        if($repair_by==$result_users_list['username']){
-	                        ?>
-	                            <option value="<?php echo $result_users_list['username']; ?>" selected><?php echo $result_users_list['staff_name']; ?> </option>
-	                        <?php     
-	                        }else{
-	                        ?>
-	                            <option value="<?php echo $result_users_list['username']; ?>"><?php echo $result_users_list['staff_name']; ?> </option>
-	                        <?php 
-	                        }
-	                    
-	                    }
-						echo "</select>";
+								<td><input type="number" name="spare_cost" onpaste="return false;" ondrop="return false;" autocomplete="off" value="<?php echo $sparecost;?>" onkeypress="return isNumberKey(event)" ></td>
+
+							</tr>
+							<tr>
+								<td></td>
+								<td class="txt_lable">Customer GST number</td>
+							</tr>
+							<tr>
+								<td class="txt_lable" align="right"><input type="checkbox" onclick='calculate_gst();' name="gst_enabled_bill" id="gst_enabled_bill"><label style="color:red;font-size:16px;">GST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+								<td class="txt_lable"><input type="text" name="customer_gst_number" ></td>
+							</tr>
+		
+						</table>
+
+						<br>
+
+						<div class="submit_button_div"><input  type="submit" name="submit" value="Proceed for Delivery" /></div>
+					</form>
+					<?php
+						}elseif($transaction='illegal'){
+							echo "No Such Transaction Found.";
+						}
 						?>
-						</td>
-							<td><input type="number" name="spare_cost" onpaste="return false;" ondrop="return false;" autocomplete="off" value="<?php echo $sparecost;?>" onkeypress="return isNumberKey(event)" ></td>
-
-						</tr>
-						<tr>
-						    <td></td>
-						    <td class="txt_lable">Customer GST number</td>
-						</tr>
-						<tr>
-						    <td class="txt_lable" align="right"><input type="checkbox" onclick='calculate_gst();' name="gst_enabled_bill" id="gst_enabled_bill"><label style="color:red;font-size:16px;">GST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
-						    <td class="txt_lable"><input type="text" name="customer_gst_number" ></td>
-						</tr>
-    
-					</table>
-
-					<br>
-
-					<div class="submit_button_div"><input  type="submit" name="submit" value="Proceed for Delivery" /></div>
-				</form>
-				<?php
-				      }elseif($transaction='illegal'){
-				          echo "No Such Transaction Found.";
-				      }
-                    ?>
 				</div>
 			</div>
 		</div>

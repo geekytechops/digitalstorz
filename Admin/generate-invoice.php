@@ -1,4 +1,4 @@
-<?php 
+	<?php 
 date_default_timezone_set("Asia/Kolkata");
 session_start();
 //print_r($_SESSION);
