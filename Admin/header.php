@@ -58,13 +58,13 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
-                                <a class="dropdown-item" href="change-password-ui.php"><i class="ri-user-line align-middle me-1"></i> Change Password</a>
-                                <a class="dropdown-item" href="user-plan-details-ui.php"><i class="ri-wallet-2-line align-middle me-1"></i> Plan Details</a>
-                                <a class="dropdown-item d-block" href="settings.php"><span class="badge bg-success float-end mt-1">11</span><i class="ri-settings-2-line align-middle me-1"></i> Settings</a>
-                                <a class="dropdown-item" href="manage-users-ui.php"><i class="ri-lock-unlock-line align-middle me-1"></i> Manage Users</a>
-                                <a class="dropdown-item" href="manage-store-ui.php"><i class="ri-lock-unlock-line align-middle me-1"></i> Manage Store</a>
+                                <a class="dropdown-item" href="change-password-ui"><i class="ri-user-line align-middle me-1"></i> Change Password</a>
+                                <a class="dropdown-item" href="user-plan-details-ui"><i class="ri-wallet-2-line align-middle me-1"></i> Plan Details</a>
+                                <a class="dropdown-item d-block" href="settings"><span class="badge bg-success float-end mt-1">11</span><i class="ri-settings-2-line align-middle me-1"></i> Settings</a>
+                                <a class="dropdown-item" href="manage-users-ui"><i class="ri-lock-unlock-line align-middle me-1"></i> Manage Users</a>
+                                <a class="dropdown-item" href="manage-store-ui"><i class="ri-lock-unlock-line align-middle me-1"></i> Manage Store</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
+                                <a class="dropdown-item text-danger" href="logout"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
                             </div>
                         </div>
 

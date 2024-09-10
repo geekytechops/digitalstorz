@@ -278,12 +278,12 @@ $cust_entry_id=$_REQUEST['job_id'];
             }
         ?>
         <br>
-        <div style="font-family: Calibri;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Damage Images:</b></div><br>
+        <!-- <div style="font-family: Calibri;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Damage Images:</b></div><br>
         <div style="font-family: 'Trebuchet MS', sans-serif; padding-left:20px;">
             <?php for ($i = 0; $i < count($damage_images); $i++) { ?>    
         <img src="uploads/<?= htmlspecialchars($damage_images[$i]) ?>" alt="Damage Image" style="width: 100px; height: auto; margin-right: 10px; border: 1px solid #ddd; border-radius: 4px;">
 
-<?php } ?>
+<?php } ?> -->
 </div>
 
     <div style="display: flex;justify-content: center;align-items:center">

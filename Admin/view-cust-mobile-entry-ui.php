@@ -139,13 +139,8 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
         
                                         <!-- Nav tabs -->
                                         <ul class="nav nav-pills" role="tablist">
-                                            <li class="nav-item waves-effect waves-light">
-                                                <a class="nav-link active" data-bs-toggle="tab" href="#all" role="tab">
-                                                    <i class="dripicons-home me-1 align-middle"></i> <span class="d-none d-md-inline-block">All</span> 
-                                                </a>
-                                            </li>
-                                            <li class="nav-item waves-effect waves-light" onclick="getTableData('datatable-pending','pending')">
-                                                <a class="nav-link" data-bs-toggle="tab" href="#pending" role="tab" >
+                                            <li class="nav-item waves-effect waves-light" id="pendingTable" onclick="getTableData('datatable-pending','pending')">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#pending" role="tab" id="pendingTableAnchor">
                                                     <i class="dripicons-user me-1 align-middle"></i> <span class="d-none d-md-inline-block">Pending</span>
                                                 </a>
                                             </li>
@@ -169,11 +164,16 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                     <i class="dripicons-gear me-1 align-middle"></i> <span class="d-none d-md-inline-block">Delivered (Rejected)</span>
                                                 </a>
                                             </li>
+                                            <li class="nav-item waves-effect waves-light">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#all" role="tab" onclick="getTableData('datatable-all','all')">
+                                                    <i class="dripicons-home me-1 align-middle"></i> <span class="d-none d-md-inline-block">All</span> 
+                                                </a>
+                                            </li>
                                         </ul>
         
                                         <!-- Tab panes -->
                                         <div class="tab-content p-3">
-                                            <div class="tab-pane active" id="all" role="tabpanel">
+                                            <div class="tab-pane" id="all" role="tabpanel">
                                                 <table id="datatable-all" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                 <tr>
@@ -197,7 +197,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                 </tbody>
                                                 </table>
                                             </div>
-                                            <div class="tab-pane" id="pending" role="tabpanel">
+                                            <div class="tab-pane active" id="pending" role="tabpanel">
                                                 <table id="datatable-pending" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
                                                     <tr>
@@ -318,7 +318,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                     </table>
                                             </div>
                                         </div>
-        
+                                    <input type="hidden" name="tableHandle" id="tableHandle" value="0">
                                     </div>
                                 </div>
                             </div>
@@ -381,12 +381,22 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
             },
             drawCallback: function() {
                 $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+                // console.log($('#pendingTable a').hasClass('active'));
+                // console.log($('#tableHandle').val());
+                // if(!$('#pendingTable a').hasClass('active') && $('#tableHandle').val()==0){                    
+                //     $('#tableHandle').val(1);
+                //     $('#pendingTable').trigger('click');
+                //     console.log('test');
+                // }
+                
             }
         });
+        
     }
 
     // Example of using the function to initialize the table
-    getTableData('datatable-all', 'all');
+    getTableData('datatable-pending', 'pending');
+    
 // });
 
 

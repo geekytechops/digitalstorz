@@ -13,7 +13,7 @@ if($tableType=='all'){
     $sql_cust="SELECT * FROM `adm_cust_mob_add` WHERE delete_status !=1  AND store_id=".$store_id." ORDER BY entry_id DESC";
 
 }else if($tableType=='pending'){
-    $sql_cust="SELECT * FROM `adm_cust_mob_add` WHERE `status`='Pending' AND delete_status !=1  AND store_id=".$store_id." ORDER BY entry_id DESC";
+    $sql_cust="SELECT * FROM `adm_cust_mob_add` WHERE ( `status`='Pending' OR `status`='in-process' OR `status`='customer-approval' OR `status`='customer-approved' OR `status`='spare-part' ) AND delete_status !=1  AND store_id=".$store_id." ORDER BY entry_id DESC";
 }else if($tableType=='completed'){
     $sql_cust="SELECT * FROM `adm_cust_mob_add` WHERE `status`='Completed' AND delete_status !=1  AND store_id=".$store_id." ORDER BY entry_id DESC";
 }else if($tableType=='delivered'){
@@ -76,15 +76,28 @@ while($result_cust=mysql_fetch_array($query_cust)){
     $query_get_name3=mysql_query($sql_get_name3);
     $result_getname_delby=mysql_fetch_array($query_get_name3);
 
+    if($result_cust['status']=='in-process'){
+        $status = '<span class="badge bg-warning fs-6">In Process</span>';
+    }else if($result_cust['status']=='customer-approval'){
+        $status = '<span class="badge bg-secondary fs-6">Waiting for <br>Customer Approval</span>';
+    }else if($result_cust['status']=='customer-approved'){
+        $status = '<span class="badge bg-success fs-6">Customer Approved</span>';
+    }else if($result_cust['status']=='spare-part'){
+        $status = '<span class="badge bg-secondary fs-6">Waiting for <br>Spare Part</span>';
+    }else{
+        $status = $result_cust['status'];
+    }
+
     $row = [
         "entry_id" => $result_cust['entry_id'],
         "received_date" => $result_cust['added_date'],
         "customer_name"=>$result_cust['customer_name'],
         "brand_model"=>$result_cust['mobile_name'],
-        "status"=>$del_msg_stat.$result_cust['status'],
+        "status"=>$del_msg_stat.$status,
         "defects"=>$mob_def_result['defect_name'].$defect_2.$defect_3,
         "contact"=>$result_cust['cust_contact'].' / '.$result_cust['cust_alt_contact'],
-        "action"=>'<a class="btn btn-outline-success btn-sm" href="add-cust-mobile-ui.php?entry_id='.$result_cust['entry_id'].'">View</a>
+        "action"=>'<a class="btn btn-outline-dark btn-sm" href="print-job.php?job_id='.$result_cust['entry_id'].'">Print</a>
+        <a class="btn btn-outline-success btn-sm" href="add-cust-mobile-ui.php?entry_id='.$result_cust['entry_id'].'">View</a>
         <a class="btn btn-outline-info btn-sm" href="mobile-delivery-invoice-ui.php?delivery-id='.$result_cust['entry_id'].'">Instant Delivery</a>
         <a class="btn btn-outline-danger btn-sm" href="mobile-delivery-instant-reject-ui.php?delivery-id='.$result_cust['entry_id'].'&action=inst_rej_del">Instant Reject</a>',
     ];

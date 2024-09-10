@@ -185,7 +185,7 @@ $date_now = date("Y-m-d");
                             <div class="card">
                                 <div class="card-body">
 
-                                <div id="calendar"></div>
+                                <div id="calendar" style="width:500px;"></div>
 
                                 </div>
                             </div>                            

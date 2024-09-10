@@ -24,7 +24,7 @@ $est_amount=''; $adv_amount=''; $remarks='';
         
         <meta charset="utf-8" />
         <title><?php echo $session_store_name;?> </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesdesign" name="author" />
         <!-- App favicon -->
@@ -88,5 +88,14 @@ $est_amount=''; $adv_amount=''; $remarks='';
             margin: auto;
             display: block;
         }
+
+        .vertical-menu{
+            display:block;
+        }
+
+        .main-content {
+        margin-left: 250px !important;
+        overflow: hidden;
+    }
 </style>
     </head>

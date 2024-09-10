@@ -1,4 +1,9 @@
+RewriteEngine On
 
-# php -- BEGIN cPanel-generated handler, do not edit
-# This domain inherits the “PHP” package.
-# php -- END cPanel-generated handler, do not edit
+# If the request does not contain a file extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}\.php -f
+
+# Rewrite the URL to add the .php extension
+RewriteRule ^(.*)$ $1.php [L]
