@@ -24,7 +24,7 @@ $est_amount=''; $adv_amount=''; $remarks='';
         
         <meta charset="utf-8" />
         <title><?php echo $session_store_name;?> </title>
-        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesdesign" name="author" />
         <!-- App favicon -->
@@ -45,6 +45,8 @@ $est_amount=''; $adv_amount=''; $remarks='';
         <link href="../panel-assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
         <link href="../panel-assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
+        <link href="../panel-assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />   
+
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <!-- Icons Css -->
         <link href="../panel-assets/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -55,6 +57,22 @@ $est_amount=''; $adv_amount=''; $remarks='';
         <link href="../panel-assets/css/patternlock.css" id="app-style" rel="stylesheet" type="text/css" />
         <link href="../panel-assets/css/panel.css" rel="stylesheet" type="text/css"/>
 <style>
+
+#vertical-menu-btn{
+        display:none;
+    }
+
+@media only screen and (max-width: 767px) {
+
+    #vertical-menu-btn{
+        display:block;
+    }
+    .vertical-menu{
+        display:none;
+    }
+
+}
+
             .logo {
             font-family: 'Arial', sans-serif; /* Font style */
             font-size: 20px; /* Font size */
@@ -67,7 +85,7 @@ $est_amount=''; $adv_amount=''; $remarks='';
             -webkit-background-clip: text; /* Clipping background to text */
             color: transparent; /* Text color transparent for gradient */
             display: inline-block; /* Inline-block to contain text */
-            padding: 10px; /* Padding around text */
+            padding: 0; /* Padding around text */
         }
 
         .pattern_lock{
@@ -88,14 +106,10 @@ $est_amount=''; $adv_amount=''; $remarks='';
             margin: auto;
             display: block;
         }
-
-        .vertical-menu{
-            display:block;
-        }
-
-        .main-content {
+        
+        /* .main-content {
         margin-left: 250px !important;
         overflow: hidden;
-    }
+    } */
 </style>
     </head>

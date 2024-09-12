@@ -50,3 +50,30 @@ const createOtherStaff = (name,mobile) =>{
         }
     })
 }
+
+const addLockData = () =>{
+
+        var selectedPattern = p.getPattern();                
+        $('#patternlock_data').val(selectedPattern);
+        if(isNaN(selectedPattern)){
+            alert('No pattern drawn');
+            return false;
+        }
+
+    $('#patternModel').modal('hide');
+}
+
+
+$('#vertical-menu-btn').click(function(){
+    $('.vertical-menu').toggle();
+})
+
+// const toggleScreenlock = () =>{			
+//     if($('input[name="screenlock_types"]:checked').val()==0){
+//         $('#pin_lock').hide();
+//         $('#pattern_lock').css('display','flex');
+//     }else{
+//         $('#pin_lock').show();
+//         $('#pattern_lock').hide();
+//     }
+// }

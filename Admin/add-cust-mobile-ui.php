@@ -87,11 +87,11 @@ if(isset($_REQUEST['submit'])){
 		$customer_type=$_REQUEST['customer_type'];
 		$screenlock_type=$_REQUEST['screenlock_type'];
 
-		if($screenlock_type==0){
-			$screen_lock = $_REQUEST['patternlock_data'];
-		}else{
-			$screen_lock = $_REQUEST['screen_lock'];
-		}
+		// if($screenlock_type==0){
+			$screen_lock1 = $_REQUEST['patternlock_data'];
+		// }else{
+			$screen_lock2 = $_REQUEST['pin-lock'];
+		// }
 
 		$defect_type=$_REQUEST['defect_type'];
 		$pickup_address=json_encode($_REQUEST['pickup_address']);
@@ -106,8 +106,8 @@ if(isset($_REQUEST['submit'])){
 		$cur_time = date('Y-m-d H:i:s');
 
 		//Inserting Data
-		$sql_ins="INSERT INTO `adm_cust_mob_add`(`customer_name`, `mobile_name`,`cust_contact`,`cust_alt_contact`,`cust_email`,`send_sms_to_alt`,`imei_serial_num`,`mobile_defect`,`mobile_defect_2`,`mobile_defect_3`,`mobile_defect_4`,`damage_description`,`damage_images`,`screenlock_type`,`screen_lock`,`defect_type`,`pickup_address`,`customer_fulfillment_type`,`defect_description`,`actual_amount`,`rejected_reason`,`exp_delivery`,`est_amount`,`adv_amount`,`remarks`,`added_date`,`status`,`rejected`,`delete_status`,`added_by`,`store_id`,`adv_payment_mode`,`gst`,`customer_gst_no` ,`multi_payment`) VALUES 
-		('".$cust_name."','".$mobile_name."','".$contact_no."','".$alt_contact_no."','".$email."','".$send_sms_alt_cont."','".$imei_sn."','".$mobile_defect."','".$mobile_defect2."','".$mobile_defect3."','".$mobile_defect4."','".$tagsInputValues."','".$damage_images_save."',".$screenlock_type.",'".$screen_lock."',".$defect_type.",'".$pickup_address."',".$customer_type.",'".$defect_description."','0','".$rejected_reason."','".$exp_delivery."','".$est_amount."','".$adv_amount."','".$remarks."','".$cur_time ."','Pending', '0','0','".$added_by."','".$store_id."','".$adv_payment_mode."','".$gst_transaction."','".$cust_gst_no."','".$multi_pay."')";
+		$sql_ins="INSERT INTO `adm_cust_mob_add`(`customer_name`, `mobile_name`,`cust_contact`,`cust_alt_contact`,`cust_email`,`send_sms_to_alt`,`imei_serial_num`,`mobile_defect`,`mobile_defect_2`,`mobile_defect_3`,`mobile_defect_4`,`damage_description`,`damage_images`,`screenlock_type`,`screen_lock`,`screen_lock2`,`defect_type`,`pickup_address`,`customer_fulfillment_type`,`defect_description`,`actual_amount`,`rejected_reason`,`exp_delivery`,`est_amount`,`adv_amount`,`remarks`,`added_date`,`status`,`rejected`,`delete_status`,`added_by`,`store_id`,`adv_payment_mode`,`gst`,`customer_gst_no` ,`multi_payment`) VALUES 
+		('".$cust_name."','".$mobile_name."','".$contact_no."','".$alt_contact_no."','".$email."','".$send_sms_alt_cont."','".$imei_sn."','".$mobile_defect."','".$mobile_defect2."','".$mobile_defect3."','".$mobile_defect4."','".$tagsInputValues."','".$damage_images_save."',".$screenlock_type.",'".$screen_lock1."','".$screen_lock2."',".$defect_type.",'".$pickup_address."',".$customer_type.",'".$defect_description."','0','".$rejected_reason."','".$exp_delivery."','".$est_amount."','".$adv_amount."','".$remarks."','".$cur_time ."','Pending', '0','0','".$added_by."','".$store_id."','".$adv_payment_mode."','".$gst_transaction."','".$cust_gst_no."','".$multi_pay."')";
 		
 		$mob_def_sql1="SELECT `defect_name` FROM `adm_mobile_defects` WHERE `defect_id`=".$mobile_defect;
 		$mob_def_query1=mysql_query($mob_def_sql1);
@@ -264,8 +264,8 @@ if(isset($_REQUEST['submit'])){
         //echo 'sms less than 200'; exit;
 		// $_REQUEST['job_id'] = 13; 
 		// include('print-job.php');
-		header('Location: print-job.php?job_id='.$lastInsertedId);
-		// header('Location: ./view-cust-mobile-entry-ui.php?result_key=pend&dmsg=jas');
+		// header('Location: print-job.php?job_id='.$lastInsertedId);
+		header('Location: ./view-cust-mobile-entry-ui.php?result_key=pend&dmsg=jas');
 
 		}else{
 		    //echo "sms expired";exit;
@@ -315,8 +315,8 @@ if(isset($_REQUEST['submit'])){
         //sleep (1);
         //exit;	 
 		// include('print-job.php?entry_id='.$lastInsertedId);
-        header('Location: print-job.php?job_id='.$lastInsertedId);
-        // header('Location: ./view-cust-mobile-entry-ui.php?result_key=pend&dmsg=jas');
+        // header('Location: print-job.php?job_id='.$lastInsertedId);
+        header('Location: ./view-cust-mobile-entry-ui.php?result_key=pend&dmsg=jas');
 	}
 		}else{
 			header('Location: ./add-cust-mobile-ui.php?rslt=failed');
@@ -544,9 +544,9 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 		// $screenlock_type=$_REQUEST['screenlock_type'];
 
 		// if($screenlock_type==0){
-		// 	$screen_lock = $_REQUEST['patternlock_data'];
+			$screen_lock1 = $_REQUEST['patternlock_data'];
 		// }else{
-		// 	$screen_lock = $_REQUEST['screen_lock'];
+			$screen_lock2 = $_REQUEST['pin-lock'];
 		// }
 
 		$defect_type=$_REQUEST['defect_type'];
@@ -582,6 +582,8 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 									`mobile_defect_3`='".$mobile_defect3."',
 									`mobile_defect_4`='".$mobile_defect4."',
 									`defect_type`= ".$defect_type.",
+									`screen_lock`= ".$screen_lock1.",
+									`screen_lock2`= ".$screen_lock2.",
 									`pickup_address`= '".$pickup_address."',
 									`customer_fulfillment_type`= ".$customer_type.",
 									`defect_description`= '".$defect_description."', 
@@ -749,7 +751,17 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
             <?php include('sidebar.php') ?>
             <!-- Left Sidebar End -->
 
-            
+			<style>
+
+						.select2-container--default .select2-selection--multiple {
+            border: 1px solid #000 !important; 
+            border-radius: 4px; 
+        }
+
+        .select2-container--default .select2-selection--multiple:focus {
+            border-color: #000 !important;
+        }
+			</style>
 
             <!-- ============================================================== -->
             <!-- Start right Content here -->
@@ -979,24 +991,32 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 						</div>
 						<div class="col-md-6" style="display:<?= $selectDefectTypeRes['defect_type']==1 ? 'block' : 'none' ?>" id="defect_description_div">
 							<label for="defect_description">Enter the Defect Description</label>
-							<textarea name="defect_description" id="defect_description" class="form-control" ><?=$defect_description?></textarea>
+							<textarea rows="4" name="defect_description" id="defect_description" class="form-control" ><?=$defect_description?></textarea>
 						</div>
-						</div>	
-						<div class="row mt-4">
-						<div class="col-md-6">
-							<label class="form-label">Advance Amount:</label>
-							<input type="text" name="adv_amount" class="form-control" value="<?php echo $adv_amount ?>" onkeypress="return onlyNumberKey(event)" onpaste="return false;" ondrop="return false;" autocomplete="off">
-						</div>	
 						<div class="col-md-6">
 							<label class="form-label">Remarks:</label>
 							<textarea rows="4" type="text" name="remarks" class="form-control" value="<?php echo $remarks ?>" ></textarea>
 						</div>	
+						</div>	
+						<div class="row mt-4">
 						<div class="row mt-4">
 						<?php
 					$adv_pay_modes = array("cash"=>"Cash", "card"=>"Credit/Debit Card", "googlepay"=>"Google Pay", "phonepe"=>"Phone Pe", "paytm"=>"Paytm", "otherwallet"=>"Other Wallet",  "none"=>"None");
 
 					?>
-						<div class="col-md-6">
+						
+					</div>
+					</div>
+					</div>
+					
+
+						<div class="col-md-6 mb-4">
+							<div class="row">
+							<div class="col-md-4">
+							<label class="form-label">Advance Amount:</label>
+							<input type="text" name="adv_amount" class="form-control" value="<?php echo $adv_amount ?>" onkeypress="return onlyNumberKey(event)" onpaste="return false;" ondrop="return false;" autocomplete="off">
+						</div>	
+						<div class="col-md-4">
 							<label class="form-label">Advance Payment Mode:</label>
 							<select name='adv_payment_mode[]' id="adv_payment_mode" class="form-select select2 select2-multiple" onchange="paymentHandle()" multiple="multiple"  multiple data-placeholder="Choose Payment Mode...">
 							<?php
@@ -1015,7 +1035,7 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 							?>
 							</select>
 						</div>	
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<label class="form-label">Estimated Delivery:</label>
 							<input  type="text" id="date_picker" name="exp_delivery" class="form-control" value="<?php echo $exp_delivery ?>" >
 						</div>
@@ -1075,15 +1095,11 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 						<?php
 						}
 						?>
-						<div><?php echo $status_radio; ?></div>
-					<div class="mt-4"><input class="btn btn-primary" type="submit" name="<?php echo $btn_name;?>" value="<?php echo $btn_value;?>" /></div>		
+						<div><?php echo $status_radio; ?></div>					
 					
 					</div>
-					</div>
-					</div>
-					<?php if(!isset($_REQUEST['entry_id'])){ ?>
-						<div class="col-md-6 mb-4">
-							<div>
+
+							<!-- <div>
 								<h5 class="text-center">Add Screen Lock</h5>
 								<h6 class="text-center">Screen Lock Type</h6>
 							</div>
@@ -1103,7 +1119,6 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 							</div>
 							<div class="row flex-column align-items-center" style="height:390px;">
 							<div class="col-md-6 pattern_lock" id="pattern_lock">
-							<!-- <label for="pin-lock">Pattern Lock</label> -->
 								<svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 									<g class="lock-actives"></g>
 									<g class="lock-lines"></g>
@@ -1123,17 +1138,17 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 								<svg>
 							</div>
 							<div class="col-md-6 text-center mt-4 mb-4" id="pin_lock" style="display:none">
-								<!-- <label for="pin-lock" class="mt-4">Pin Lock</label> -->
 								<input type="text" name="pin-lock" id="pin-lock" class="form-control mt-4" name="screen_lock">
 								<input type="hidden" name="patternlock_data" id="patternlock_data">
 							</div>							
-						</div>
+						</div> -->
+						<?php if(!isset($_REQUEST['entry_id'])){ ?>
 						<div class="col-md-12">
 							<div class="accordion" id="accordionExample">                                            
 									<div class="accordion-item">
 										<h2 class="accordion-header" id="headingThree">
 											<button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-												 Mobile Damages
+												 Device Damages
 											</button>
 										</h2>
 										<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
@@ -1146,7 +1161,7 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 													</div>
 													<div class="col-md-12 mt-2">
 														<div class="d-flex flex-column">
-															<label for="upload_damages">Upload Mobile Damage Images</label>
+															<label for="upload_damages">Upload Device Damage Images</label>
 															<input type="file" name="upload_damages" id="upload_damages" multiple accept=".jpeg, .jpg, .png">
 														</div>
 														<div>
@@ -1162,7 +1177,30 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 									</div>
                                 </div>
 							</div>
-						<?php } ?>										
+							<div class="col-md-12 mb-2 d-flex mt-2"> 
+								<input type="hidden" name="patternlock_data" id="patternlock_data">
+								<input type="hidden" name="screenlock_type" value="0" id="screenlock_type"> 
+								<input type="hidden" name="screen_lock" id="screen_lock"> 
+								<input type="text" name="pin-lock" id="pin-lock" class="form-control" style="width:80%">
+								<button type="button" id="patternOpen" class="btn btn-dark ms-3" name="patternOpen" onclick="openPatternModel()">Pattern Lock</button>
+							</div>
+							<?php } ?>	
+							</div>
+							</div>
+									
+						<div class="mt-4">
+							<input class="btn btn-info" type="submit" name="<?php echo $btn_name;?>" value="<?php echo $btn_value;?>" />
+						
+						
+						<?php if(isset($_REQUEST['entry_id'])){
+
+							?>
+							
+							<a class="btn btn-secondary" href="mobile-delivery-invoice-ui.php?delivery-id=<?=$_REQUEST['entry_id']?>" >Instant Delivery</a>
+
+							<?php
+						} ?>
+						</div>	
 				</form>
                 <?php
 				      }elseif($transaction='illegal'){
@@ -1368,11 +1406,21 @@ function getData(empid, divid){
     function generateRow() {
     var c=document.getElementById("reject_reason_lable");
     var d=document.getElementById("reject_reason");
-    
+    c.innerHTML='';
+	d.innerHTML='';
     c.innerHTML+="Reject Reason:";
     d.innerHTML+="<input type='text' class='form-control' name='rejected_reason' value=''>";
     
     }
+
+
+	$('input[name="entry_status_upd"]').click(function(){
+		if($(this).attr('id')!='entry_status_upd3'){
+			$('#reject_reason').html('');
+			$('#reject_reason_lable').html('');
+		}
+
+	})
     
     function showServiceDetails(str) {
         if (str == "") {
@@ -1422,16 +1470,6 @@ const toggleDefect = () =>{
     }else{
         $('#defect_description_div').hide();
         $('#defectSelect_div').css('display','flex');
-    }
-}
-
-const toggleScreenlock = () =>{			
-    if($('input[name="screenlock_type"]:checked').val()==0){
-        $('#pin_lock').hide();
-        $('#pattern_lock').css('display','flex');
-    }else{
-        $('#pin_lock').show();
-        $('#pattern_lock').hide();
     }
 }
 
@@ -1533,6 +1571,10 @@ $('#adv_payment_mode').find(':selected').each(function() {
 	}else{
 		$('#payment_multi').hide();
 	}
+}
+
+const openPatternModel = () => {
+	$('#patternModel').modal('show')
 }
 
 </script>

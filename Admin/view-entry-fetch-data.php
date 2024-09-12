@@ -97,8 +97,7 @@ while($result_cust=mysql_fetch_array($query_cust)){
         "defects"=>$mob_def_result['defect_name'].$defect_2.$defect_3,
         "contact"=>$result_cust['cust_contact'].' / '.$result_cust['cust_alt_contact'],
         "action"=>'<a class="btn btn-outline-dark btn-sm" href="print-job.php?job_id='.$result_cust['entry_id'].'">Print</a>
-        <a class="btn btn-outline-success btn-sm" href="add-cust-mobile-ui.php?entry_id='.$result_cust['entry_id'].'">View</a>
-        <a class="btn btn-outline-info btn-sm" href="mobile-delivery-invoice-ui.php?delivery-id='.$result_cust['entry_id'].'">Instant Delivery</a>
+        <a class="btn btn-outline-success btn-sm" href="add-cust-mobile-ui.php?entry_id='.$result_cust['entry_id'].'">View</a>    
         <a class="btn btn-outline-danger btn-sm" href="mobile-delivery-instant-reject-ui.php?delivery-id='.$result_cust['entry_id'].'&action=inst_rej_del">Instant Reject</a>',
     ];
 

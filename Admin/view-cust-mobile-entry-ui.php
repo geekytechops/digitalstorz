@@ -138,7 +138,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                         <p class="card-title-desc">View / Update Customer Jobs.</p>
         
                                         <!-- Nav tabs -->
-                                        <ul class="nav nav-pills" role="tablist">
+                                        <ul class="nav nav-tabs nav-justified nav-tabs-custom" role="tablist">
                                             <li class="nav-item waves-effect waves-light" id="pendingTable" onclick="getTableData('datatable-pending','pending')">
                                                 <a class="nav-link active" data-bs-toggle="tab" href="#pending" role="tab" id="pendingTableAnchor">
                                                     <i class="dripicons-user me-1 align-middle"></i> <span class="d-none d-md-inline-block">Pending</span>
@@ -363,6 +363,8 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                     d.tableType = tableType; // Send the additional parameter
                 }
             },
+            "ordering": true,
+            order: [],
             columns: [
                 { data: 'entry_id' }, // Corresponds to the keys in your JSON
                 { data: 'received_date' },

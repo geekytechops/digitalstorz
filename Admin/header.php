@@ -34,6 +34,52 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+<div id="patternModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="patternModelLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="patternModelLabel">Mobile Lock</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form id="other_staff_create_model">
+        <div>
+								<h5 class="text-center">Add Screen Lock</h5>
+								<h6 class="text-center">Screen Lock Type</h6>
+							</div>
+							<div class="row flex-column align-items-center">
+							<div class="col-md-6 pattern_lock" id="pattern_lock">
+								<svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+									<g class="lock-actives"></g>
+									<g class="lock-lines"></g>
+									<g class="lock-dots">
+										<circle cx="20" cy="20" r="1"/>
+										<circle cx="50" cy="20" r="1"/>
+										<circle cx="80" cy="20" r="1"/>
+
+										<circle cx="20" cy="50" r="1"/>
+										<circle cx="50" cy="50" r="1"/>
+										<circle cx="80" cy="50" r="1"/>
+
+										<circle cx="20" cy="80" r="1"/>
+										<circle cx="50" cy="80" r="1"/>
+										<circle cx="80" cy="80" r="1"/>
+									</g>
+								<svg>
+							</div>
+							<div class="col-md-6 text-center mt-4 mb-4" id="pin_lock" style="display:none">
+								<input type="text" name="pin-lock" id="pin-lock" class="form-control mt-4" >
+								<input type="hidden" name="patternlock_data1" id="patternlock_data1">
+							</div>							
+						</div>
+        <button type="button" class="btn btn-success mt-2" onclick="addLockData()">Add Lock</button>
+    </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <header id="page-topbar">
                 <div class="navbar-header">
                     <div class="d-flex">
@@ -43,6 +89,9 @@
 
                             <a href="index.html" class="logo logo-light"><?=$session_store_name?></a>
                         </div>
+                        <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
+                            <i class="ri-menu-2-line align-middle"></i>
+                        </button>
 
                     </div>
 

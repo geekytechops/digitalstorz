@@ -196,3 +196,80 @@
       gap: 10px;
       margin-top: 20px;
     }
+
+	.form-control, .form-select  {
+        border-color: #333; /* Darken the border color */
+        padding: 10px; /* Add some padding to input fields */
+    }
+
+    .form-label {
+        font-weight: bold; /* Make labels bold for better visibility */
+    }
+
+    .custom-section {
+        margin-bottom: 20px; /* Add margin between sections */
+        padding: 20px; /* Add padding to sections */
+        border: 1px solid #ddd; /* Add a border to sections for distinction */
+        border-radius: 5px; /* Rounded corners for sections */
+        background-color: #f9f9f9; /* Light background color for sections */
+    }
+
+    .section-heading {
+        font-size: 18px; /* Slightly larger font for section headings */
+        color: #333; /* Darker color for section headings */
+        margin-bottom: 10px; /* Margin below section headings */
+    }
+
+    .input-group {
+        margin-bottom: 15px; /* Add space between input groups */
+    }
+
+    .accordion-button {
+        font-weight: bold; /* Make accordion button text bold */
+    }
+
+/* Change border color for all Select2 elements */
+.select2-container--default .select2-selection--multiple {
+    border: 2px solid #ff0000; /* Change #ff0000 to your desired border color */
+    border-radius: 4px; /* Optional: change border radius if needed */
+}
+
+/* Change border color when the Select2 elements are focused */
+.select2-container--default .select2-selection--multiple:focus {
+    border-color: #00ff00; /* Change #00ff00 to your desired border color when focused */
+}
+
+.accordion-button{
+	border:1px solid #000;
+}
+
+table.table-bordered{
+    border:1px solid #aaa;
+    margin-top:20px;
+  }
+table.table-bordered > thead > tr > th{
+    border:1px solid #aaa;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid #aaa;
+}
+
+body[data-sidebar=dark] .vertical-menu , body[data-sidebar=dark] .navbar-brand-box{
+	background: #007bff;
+}
+
+body[data-sidebar=dark] #sidebar-menu ul li a , body[data-sidebar=dark] #sidebar-menu ul li a i{
+	color:#fff;
+}
+
+body[data-sidebar=dark] .mm-active , body[data-sidebar=dark] .mm-active>a {
+	color: #000 !important;
+}
+
+body[data-sidebar=dark] .menu-title{
+	color: #fff;
+}
+
+	* {
+		font-weight: 700;		
+	}
