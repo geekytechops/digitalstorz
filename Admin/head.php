@@ -24,7 +24,8 @@ $est_amount=''; $adv_amount=''; $remarks='';
         
         <meta charset="utf-8" />
         <title><?php echo $session_store_name;?> </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesdesign" name="author" />
         <!-- App favicon -->
@@ -56,22 +57,61 @@ $est_amount=''; $adv_amount=''; $remarks='';
             
         <link href="../panel-assets/css/patternlock.css" id="app-style" rel="stylesheet" type="text/css" />
         <link href="../panel-assets/css/panel.css" rel="stylesheet" type="text/css"/>
+
+        <?php
+        function isMobileDevice() {
+            // Check for common mobile device keywords in the user agent string
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $mobileKeywords = array('Mobi', 'Android', 'iPhone', 'iPad', 'iPod', 'BlackBerry', 'IEMobile', 'Opera Mini');
+        
+            // Loop through mobile keywords to find a match
+            foreach ($mobileKeywords as $keyword) {
+                if (stripos($userAgent, $keyword) !== false) {
+                    return true; // Mobile device detected
+                }
+            }
+            return false; // Desktop device detected
+        }
+
+        if(isMobileDevice()){
+            ?>
+            <style>
+
+.main-content{
+width:100%;
+}
+
+            </style>
+    
+            <?php
+        }
+
+
+        ?>
 <style>
 
 #vertical-menu-btn{
         display:none;
     }
 
-@media only screen and (max-width: 767px) {
+/* @media only screen and (max-width: 767px) { */
 
-    #vertical-menu-btn{
+    /* #vertical-menu-btn{
+        display:block;
+    } */
+    .vertical-menu{
         display:block;
     }
-    .vertical-menu{
-        display:none;
+
+    .main-content{
+        overflow: hidden;
+        margin-left: 250px !important;
+    }
+    .footer{
+        left:250px;
     }
 
-}
+/* } */
 
             .logo {
             font-family: 'Arial', sans-serif; /* Font style */

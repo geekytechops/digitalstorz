@@ -761,7 +761,12 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
         .select2-container--default .select2-selection--multiple:focus {
             border-color: #000 !important;
         }
+
+		/* .main-content{
+			width:100%;
+		} */
 			</style>
+
 
             <!-- ============================================================== -->
             <!-- Start right Content here -->
@@ -1037,7 +1042,7 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 						</div>	
 						<div class="col-md-4">
 							<label class="form-label">Estimated Delivery:</label>
-							<input  type="text" id="date_picker" name="exp_delivery" class="form-control" value="<?php echo $exp_delivery ?>" >
+							<input  type="date" id="date_picker" name="exp_delivery" class="form-control" value="<?php echo $exp_delivery ?>" >
 						</div>
 						<?php 
 						
@@ -1177,10 +1182,11 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 									</div>
                                 </div>
 							</div>
+							<div class="col-md-12"><label for="pin-lock">Password:</label></div>
 							<div class="col-md-12 mb-2 d-flex mt-2"> 
 								<input type="hidden" name="patternlock_data" id="patternlock_data">
 								<input type="hidden" name="screenlock_type" value="0" id="screenlock_type"> 
-								<input type="hidden" name="screen_lock" id="screen_lock"> 
+								<input type="hidden" name="screen_lock" id="screen_lock"> 								
 								<input type="text" name="pin-lock" id="pin-lock" class="form-control" style="width:80%">
 								<button type="button" id="patternOpen" class="btn btn-dark ms-3" name="patternOpen" onclick="openPatternModel()">Pattern Lock</button>
 							</div>
@@ -1195,12 +1201,58 @@ if(isset($_REQUEST['update'])){ //When form Submits for Update
 						<?php if(isset($_REQUEST['entry_id'])){
 
 							?>
-							
+							<a class="btn btn-outline-dark btn-sm" href="print-job.php?job_id=<?=$_REQUEST['entry_id']?>">Print</a>
 							<a class="btn btn-secondary" href="mobile-delivery-invoice-ui.php?delivery-id=<?=$_REQUEST['entry_id']?>" >Instant Delivery</a>
+							<a class="btn btn-outline-danger btn-sm" href="mobile-delivery-instant-reject-ui.php?delivery-id=<?=$_REQUEST['entry_id']?>&action=inst_rej_del">Instant Reject</a>
 
 							<?php
 						} ?>
 						</div>	
+
+						<div id="pickupAddressModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pickupAddressModelLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="pickupAddressModelLabel">Pick Up Address</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+									<form id="address_create_model">
+									<div class="form-group">
+										<label for="pickup_address">Address</label>
+										<input type="text" class="form-control" id="pickup_address" name="pickup_address[]" required>
+									</div>
+									<div class="form-group">
+										<label for="address_aprt">Apartment, Suite , etc.</label>
+										<input type="text" class="form-control" id="address_aprt" name="pickup_address[]" required>
+									</div>
+									<div class="form-group">
+										<label for="address_city">City</label>
+										<input type="text" class="form-control" id="address_city" name="pickup_address[]" required>
+									</div>
+									<div class="form-group">
+										<label for="address_state">State / Province</label>
+										<input type="text" class="form-control" id="address_state" name="pickup_address[]" required>
+									</div>
+									<div class="form-group">
+										<label for="address_country">Country</label>
+										<input type="text" class="form-control" id="address_country" name="pickup_address[]" required>
+									</div>
+									<div class="form-group">
+										<label for="address_zip">Zip Code</label>
+										<input type="text" class="form-control" id="address_zip" name="pickup_address[]" required>
+									</div>
+									<div class="form-group">
+									<label for="Mobile">Mobile Number</label>
+									<input type="tel" class="form-control" id="pickup_address_contact" required>
+									</div>
+									<button type="button" class="btn btn-success mt-2" onclick="addPickupAdress()">Add Address</button>
+								</form>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+
 				</form>
                 <?php
 				      }elseif($transaction='illegal'){
@@ -1455,12 +1507,21 @@ function getData(empid, divid){
         });
    });
 
+   const addPickupAdress = () =>{
+	$('#pickupAddressModel').modal('hide');
+   }
+
    const toggleAddress = () =>{			
-    if($('input[name="customer_type"]:checked').val()==1){
-        $('#pickup_address_div').show();
-    }else{
-        $('#pickup_address_div').hide();
-    }
+
+	if($('input[name="customer_type"]:checked').val()==1){
+		$('#pickupAddressModel').modal('show');
+	}
+
+    // if($('input[name="customer_type"]:checked').val()==1){
+    //     $('#pickup_address_div').show();
+    // }else{
+    //     $('#pickup_address_div').hide();
+    // }
 }
 
 const toggleDefect = () =>{			
