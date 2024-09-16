@@ -174,7 +174,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                         <!-- Tab panes -->
                                         <div class="tab-content p-3">
                                             <div class="tab-pane" id="all" role="tabpanel">
-                                                <table id="datatable-all" class="table table-bordered " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                <table id="datatable-all" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                 <tr>
                                                     <th>Entry ID</th>
@@ -198,7 +198,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                 </table>
                                             </div>
                                             <div class="tab-pane active" id="pending" role="tabpanel">
-                                                <table id="datatable-pending" class="table table-bordered " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                <table id="datatable-pending" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
                                                     <tr>
                                                         <th>Entry ID</th>
@@ -222,12 +222,12 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                     </table>
                                             </div>
                                             <div class="tab-pane" id="completed" role="tabpanel">
-                                            <table id="datatable-completed" class="table table-bordered " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <table id="datatable-completed" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
                                                     <tr>
                                                         <th>Entry ID</th>
                                                         <th>Received Date</th>
-                                                        <th>Customer Name</th>  
+                                                        <th>Customer Name</th>
                                                         <th>Brand / Model</th>
                                                         <th>Status</th>
                                                         <th>Defects</th>
@@ -246,7 +246,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                     </table>
                                             </div>
                                             <div class="tab-pane" id="delivered" role="tabpanel">
-                                            <table id="datatable-delivered" class="table table-bordered " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <table id="datatable-delivered" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
                                                     <tr>
                                                         <th>Entry ID</th>
@@ -270,7 +270,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                     </table>
                                             </div>
                                             <div class="tab-pane" id="rejected" role="tabpanel">
-                                            <table id="datatable-rejected" class="table table-bordered " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <table id="datatable-rejected" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
                                                     <tr>
                                                         <th>Entry ID</th>
@@ -294,7 +294,7 @@ if(isset($_SESSION['session_username']) && isset($_SESSION['session_password']))
                                                     </table>
                                             </div>
                                             <div class="tab-pane" id="delivery-rejected" role="tabpanel">
-                                            <table id="datatable-delivery_rejected" class="table table-bordered " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <table id="datatable-delivery_rejected" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
                                                     <tr>
                                                         <th>Entry ID</th>
